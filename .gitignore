@@ -1,0 +1,36 @@
+# -----------------------
+#   for client-web
+# -----------------------
+
+# dependencies
+/client-web/node_modules
+/client-web/.pnp
+/client-web/.pnp.js
+/client-web/yarn.lock
+
+# testing
+/coverage
+
+# production
+/client-web/build
+
+# misc
+/client-web/.DS_Store
+/client-web/.env.local
+/client-web/.env.development.local
+/client-web/.env.test.local
+/client-web/.env.production.local
+
+/client-web/npm-debug.log*
+/client-web/yarn-debug.log*
+/client-web/yarn-error.log*
+
+
+# -----------------------
+#   for api
+# -----------------------
+
+/api/node_modules
+/api/package-lock.json
+/api/*.log
+/api/*.gz
