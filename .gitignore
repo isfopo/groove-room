@@ -34,3 +34,4 @@
 /api/package-lock.json
 /api/*.log
 /api/*.gz
+/api/api-keys.js
