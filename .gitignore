@@ -1,3 +1,5 @@
+links.txt
+
 # -----------------------
 #   for client-web
 # -----------------------
@@ -16,6 +18,7 @@
 
 # misc
 /client-web/.DS_Store
+/client-web/.env
 /client-web/.env.local
 /client-web/.env.development.local
 /client-web/.env.test.local
