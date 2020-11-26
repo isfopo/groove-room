@@ -2,13 +2,12 @@
   "name": "groove-room",
   "version": "1.0.0",
   "description": "a social listening app",
-  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": ".git"
+    "url": "https://github.com/isfopo/groove-room"
   },
   "author": "Isaac Poole",
   "license": "ISC"
