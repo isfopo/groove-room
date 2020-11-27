@@ -7,12 +7,11 @@ import { RightSidebar } from './RightSidebar.js';
 
 const SpotifyWebApi = require('spotify-web-api-js');
 
-export const Home = () => {
+export const Home = (props) => {
 
-    const [cookies, setCookie, removeCookie] = useCookies(['authorization-cookie']);
+    const [cookies, setCookie, removeCookie] = useCookies();
 
     const [token, setToken] = useState(cookies.spotify_auth.access_token)
-    const [user, setUser] = useState({})
     
     useEffect(() => {
         const spotifyApi = new SpotifyWebApi();
@@ -27,30 +26,21 @@ export const Home = () => {
                     body: JSON.stringify(data)
                 })
                 .then(res => res.json())
-                .then(res => setUser(res[0]))
+                .then(res => setCookie("user", res[0]))
             })
     }, [token])
-
-    const playSpotify = () => {
-
-    }
-
-    const handleLogOut = () => {
-        setUser({});
-    }
 
 
     return (
         <div>
-            { !user.name ?
+            { !cookies.user ?
                 <Login /> 
             :
                 <>
-                    <button onClick={playSpotify}>Play</button>
-                    <p>{user.name}</p>
-                    <button onClick={() => handleLogOut()}>Log Out</button>
+                    <p>{cookies.user.name}</p>
                     <LeftSidebar />
                     <RightSidebar />
+                    <button onClick={() => props.history.push('/log-out')}>Log Out</button>
                 </>
             }
         </div>
