@@ -8,13 +8,5 @@ module.exports = (sequelize) => {
     image: Sequelize.STRING
   }, { sequelize });
 
-  User.associate = (models) => {
-    User.belongsToMany(models.Room, {
-      through: "user_room",
-      as: "rooms",
-      foreignKey: "room_id"
-    });
-  };
-
   return User;
 };
