@@ -6,16 +6,11 @@ module.exports = (sequelize) => {
   Room.init({
     name: Sequelize.STRING,
     // add playlist array (string of spotify uri)
-    skip_vote: Sequelize.NUMBER
+    skip_vote: {
+      type: Sequelize.INTEGER,
+      defaultValue: 0
+    }
   }, { sequelize });
-
-  Room.associate = (models) => {
-    Room.belongsToMany(models.User, {
-      through: "user_room",
-      as: "users",
-      foreignKey: "user_id"
-    });
-  };
 
   return Room;
 };
