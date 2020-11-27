@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { useCookies } from 'react-cookie';
 
 import { Login } from './Login.js';
+import { LeftSidebar } from './LeftSidebar.js';
+import { RightSidebar } from './RightSidebar.js';
 
 const SpotifyWebApi = require('spotify-web-api-js');
 
@@ -47,6 +49,8 @@ export const Home = () => {
                     <button onClick={playSpotify}>Play</button>
                     <p>{user.name}</p>
                     <button onClick={() => handleLogOut()}>Log Out</button>
+                    <LeftSidebar />
+                    <RightSidebar />
                 </>
             }
         </div>
