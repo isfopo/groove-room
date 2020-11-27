@@ -1,9 +1,11 @@
 import React, { useState, useRef } from "react";
 import { useCookies } from 'react-cookie';
+import queryString from 'query-string';
 
 import back from '../icons/arrow_back_ios-24px.svg';
 import copy from '../icons/content_copy-24px.svg';
 import done from '../icons/done-24px.svg';
+import share from '../icons/share-24px.svg';
 
 export const AddRoom = (props) => {
     
@@ -69,6 +71,15 @@ export const AddRoom = (props) => {
                             }
                         </div>
                     }
+                    <a target="_blank" rel="noreferrer"
+                        href={`mailto:?${
+                        queryString.stringify({
+                            subject: "Groove Room Id",
+                            body: `You are invited to join ${roomName}! Copy "${roomId}" in "Join Room"`
+                        })
+                    }`}>
+                        <img src={share} alt="share" />
+                    </a>
                     <form >
                         <textarea
                         readOnly
