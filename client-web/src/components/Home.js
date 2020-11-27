@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useCookies } from 'react-cookie';
+
 import { Login } from './Login.js';
 
 const SpotifyWebApi = require('spotify-web-api-js');
@@ -9,6 +10,7 @@ export const Home = () => {
     const [cookies, setCookie, removeCookie] = useCookies(['authorization-cookie']);
 
     const [token, setToken] = useState(cookies.spotify_auth.access_token)
+    const [user, setUser] = useState({})
     
     useEffect(() => {
         const spotifyApi = new SpotifyWebApi();
@@ -22,22 +24,31 @@ export const Home = () => {
                     method: "POST",
                     body: JSON.stringify(data)
                 })
-            },
-            function (err) {
-                console.error(err);
-            }
-          );
+                .then(res => res.json())
+                .then(res => setUser(res[0]))
+            })
     }, [token])
 
     const playSpotify = () => {
 
     }
 
+    const handleLogOut = () => {
+        setUser({});
+    }
+
 
     return (
         <div>
-            <Login />
-            <button onClick={playSpotify}>Play</button>
+            { !user.name ?
+                <Login /> 
+            :
+                <>
+                    <button onClick={playSpotify}>Play</button>
+                    <p>{user.name}</p>
+                    <button onClick={() => handleLogOut()}>Log Out</button>
+                </>
+            }
         </div>
     )
 }
