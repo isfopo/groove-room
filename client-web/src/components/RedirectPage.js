@@ -4,7 +4,7 @@ import { getParamValues } from '../utils/functions';
 
 export const RedirectPage = (props) => {
 
-    const [cookies, setCookie, removeCookie] = useCookies(['authorization-cookie']);
+    const [cookies, setCookie, removeCookie] = useCookies();
     
     
     useEffect(() => {
