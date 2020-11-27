@@ -23,7 +23,7 @@ export const RedirectPage = (props) => {
 
     return (
         <div>
-            Redirect Page
+            Thank you! Redirecting...
         </div>
     )
 }
