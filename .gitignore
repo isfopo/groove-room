@@ -23,6 +23,7 @@ links.txt
 /client-web/.env.development.local
 /client-web/.env.test.local
 /client-web/.env.production.local
+/client-web/.eslintcache
 
 /client-web/npm-debug.log*
 /client-web/yarn-debug.log*
@@ -38,3 +39,5 @@ links.txt
 /api/*.log
 /api/*.gz
 /api/api-keys.js
+
+/api/development.db
