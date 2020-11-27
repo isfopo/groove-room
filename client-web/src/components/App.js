@@ -6,10 +6,9 @@ import { Home } from './Home.js'
 import { RedirectPage } from './RedirectPage.js';
 import { AddRoom } from './AddRoom.js';
 import { JoinRoom } from './JoinRoom.js';
+import { LogOut } from './LogOut.js';
 
 function App() {
-
-  const [cookies, setCookie, removeCookie] = useCookies(['authorization-cookie']);
 
   return (
     <div className="main">
@@ -18,7 +17,8 @@ function App() {
           <Route path="/redirect" component={ RedirectPage } />
           <Route path="/add-room" component={ AddRoom } />
           <Route path="/join-room" component={ JoinRoom } />
-          <Route exact path="/"><Home /></Route>
+          <Route path="/log-out" component={ LogOut } />
+          <Route exact path="/" component={ Home } />
         </BrowserRouter>
       </CookiesProvider>
     </div>
