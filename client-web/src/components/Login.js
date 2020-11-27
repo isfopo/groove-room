@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 const queryString = require('query-string');
 
 export const Login = () => {
@@ -21,10 +21,8 @@ export const Login = () => {
     };
 
     return (
-        <div className="authorization">
-            <button onClick={handleLogin}>
-                Login to spotify
-            </button>
-        </div>
+        <button className="login" onClick={handleLogin}>
+            Login with Spotify
+        </button>
     )
 }
