@@ -1,15 +1,18 @@
 import React from 'react';
-import { Login } from './Login.js';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { CookiesProvider } from 'react-cookie';
+import { Home } from './Home.js'
+import {RedirectPage} from './RedirectPage.js';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        < Login />
-      </header>
+    <div className="main">
+      <CookiesProvider>
+        <BrowserRouter>
+          <Route path="/redirect" component={ RedirectPage } />
+          <Route exact path="/"><Home /></Route>
+        </BrowserRouter>
+      </CookiesProvider>
     </div>
   );
 }
