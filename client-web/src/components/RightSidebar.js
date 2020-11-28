@@ -9,6 +9,9 @@ import '../styles/Sidebar.css';
 export const RightSidebar = () => {
     return (
         <div className="sidebar right">
+            <div className="playlist-display">
+
+            </div>
             <img src={ add } alt="add" />
             <img src={ skip } alt="skip" />
             <img src={ back } alt="back" />
