@@ -3,7 +3,7 @@ var router = express.Router();
 var Room = require('../db/models').Room;
 var Profile = require('../db/models').Profile;
 
-// get Profiles matching room_id
+// get Profiles in Room
 router.get('/:room_id', async(req, res) => {
     const profiles = await Profile.findAll({
         where: {
