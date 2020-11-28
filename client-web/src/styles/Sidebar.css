@@ -1,6 +1,15 @@
-.left-sidebar {
+.sidebar {
     background-color: rgb(187, 187, 187);
     width: 30%;
+    position: absolute;
+}
+
+.left {
+    left: 0;
+}
+
+.right {
+    right: 0;
 }
 
 .room-display {
