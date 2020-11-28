@@ -4,11 +4,6 @@ var Room = require('../db/models').Room;
 var Profile = require('../db/models').Profile;
 const { Op } = require("sequelize");
 
-/* GET profiles in room */
-router.get('/', async (req, res, next) => {
-  res.send('respond with a resource');
-});
-
 /* POST create new room */
 router.post('/create', async (req, res) => {
     const room = await Room.create({
