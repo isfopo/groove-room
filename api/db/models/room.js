@@ -12,5 +12,9 @@ module.exports = (sequelize) => {
     }
   }, { sequelize });
 
+  Room.associate = (models) => {
+    Room.belongsToMany(models.Profile, { through: "profile_room" })
+  }
+
   return Room;
 };

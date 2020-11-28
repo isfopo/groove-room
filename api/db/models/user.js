@@ -8,5 +8,9 @@ module.exports = (sequelize) => {
     image: Sequelize.STRING
   }, { sequelize });
 
+  User.associate = (models) => {
+    User.hasMany(models.Profile, { foreignKey: 'user_id' })
+  }
+
   return User;
 };
