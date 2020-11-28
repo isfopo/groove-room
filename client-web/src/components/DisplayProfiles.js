@@ -9,7 +9,6 @@ export const DisplayProfiles = (props) => {
         fetch(`http://localhost:3001/profiles/${props.currentRoom.id}`)
             .then(res => res.json())
             .then(res => setProfiles(res))
-
     }, [props.currentRoom])
 
     return (
