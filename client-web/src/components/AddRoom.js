@@ -14,11 +14,11 @@ export const AddRoom = (props) => {
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [copied, setCopied] = useState(false);
 
-    const [cookies, setCookie, removeCookie] = useCookies();
+    const [cookies] = useCookies();
 
     const textAreaRef = useRef(null);
   
-    function copyToClipboard(e) {
+    const copyToClipboard = (e) => {
         textAreaRef.current.select();
         document.execCommand('copy');
         e.target.focus();
@@ -50,13 +50,11 @@ export const AddRoom = (props) => {
         <div className="add-room">
             { !isSubmitted ?
                 <form readOnly onSubmit={handleSubmit}>
-                    <label>
-                        Room Name:
-                        <input 
-                            type="text"
-                            value={roomName}
-                            onChange={e => setRoomName(e.target.value)} />
-                    </label>
+                    <input 
+                        type="text"
+                        value={roomName}
+                        placeholder="enter room id"
+                        onChange={e => setRoomName(e.target.value)} />
                     <input type="submit" value="Submit" />
                 </form>
             :
