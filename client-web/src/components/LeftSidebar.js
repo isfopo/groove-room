@@ -25,7 +25,7 @@ export const LeftSidebar = (props) => {
                 {
                     activeRooms.map( room => 
                         <p 
-                            className="room-name"
+                            className={`room-name ${ room == props.currentRoom && 'active' }`}
                             onClick={() => props.setCurrentRoom(room)}
                         >{room.name}</p>
                     )
