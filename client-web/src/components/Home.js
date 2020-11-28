@@ -12,6 +12,7 @@ export const Home = (props) => {
     const [cookies, setCookie, removeCookie] = useCookies();
 
     const [token, setToken] = useState(cookies.spotify_auth.access_token)
+    const [currentRoom, setCurrentRoom] = useState({});
     
     useEffect(() => {
         const spotifyApi = new SpotifyWebApi();
@@ -30,6 +31,9 @@ export const Home = (props) => {
             })
     }, [token])
 
+    const handleSetCurrentRoom = (room) => {
+        setCurrentRoom(room)
+    }
 
     return (
         <div>
@@ -37,8 +41,11 @@ export const Home = (props) => {
                 <Login /> 
             :
                 <>
-                    <p>{cookies.user.name}</p>
-                    <LeftSidebar />
+                    <p>{currentRoom.name}</p>
+                    <LeftSidebar 
+                        currentRoom={currentRoom}
+                        setCurrentRoom={handleSetCurrentRoom}
+                    />
                     <RightSidebar />
                     <button onClick={() => props.history.push('/log-out')}>Log Out</button>
                 </>
