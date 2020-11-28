@@ -1,22 +1,43 @@
 .sidebar {
     background-color: rgb(187, 187, 187);
     width: 30%;
+    height: 100%;
     position: absolute;
+    top: 0;
 }
 
 .left {
+    left: -29%;
+    transition: left .5s ease;
+}
+
+.left:hover {
     left: 0;
 }
 
 .right {
+    right: -29%;
+    transition: right .5s ease;
+}
+
+.right:hover {
     right: 0;
 }
 
 .room-display {
     overflow: scroll;
-    height: 500px
+    height: 95%;
+}
+
+.room-display p {
+    padding: 2% 5%;
 }
 
 .active {
     background-color: deepskyblue;
+}
+
+.playlist-display {
+    overflow: scroll;
+    height: 500px
 }
