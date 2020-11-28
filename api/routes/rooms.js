@@ -16,4 +16,9 @@ router.post('/create', async (req, res) => {
     res.json(room);
 });
 
+router.get('/:user', async (req, res) => {
+    const userRooms = await Room.findAll()
+    res.json(userRooms)
+})
+
 module.exports = router;
