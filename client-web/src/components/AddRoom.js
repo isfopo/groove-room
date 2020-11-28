@@ -19,13 +19,13 @@ export const AddRoom = (props) => {
     const textAreaRef = useRef(null);
   
     function copyToClipboard(e) {
-      textAreaRef.current.select();
-      document.execCommand('copy');
-      e.target.focus();
-      setCopied(true);
-      setTimeout(() => {
-        props.history.push('/');
-      }, 3000)
+        textAreaRef.current.select();
+        document.execCommand('copy');
+        e.target.focus();
+        setCopied(true);
+        setTimeout(() => {
+            props.history.push('/');
+        }, 3000)
     };
     
     const handleSubmit = (evt) => {
@@ -63,12 +63,13 @@ export const AddRoom = (props) => {
                     {
                     document.queryCommandSupported('copy') &&
                         <div>
-                            <button onClick={copyToClipboard}>Copy</button> 
-                            { !copied ?
-                                <img src={copy} alt="copy"/>
-                            :
-                                <img src={done} alt="done"/>
-                            }
+                            <button onClick={copyToClipboard}>
+                                { !copied ?
+                                    <img src={copy} alt="copy"/>
+                                :
+                                    <img src={done} alt="done"/>
+                                }
+                            </button> 
                         </div>
                     }
                     <a target="_blank" rel="noreferrer"
