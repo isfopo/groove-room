@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Profile } from './Profile';
 
 export const DisplayProfiles = (props) => {
 
@@ -15,7 +16,7 @@ export const DisplayProfiles = (props) => {
         <div className="profile-display">
             {
                 profiles.map( profile => 
-                    <img key={profile.id} src={profile.image} alt="profile" />
+                    <Profile key={profile.id} profile={profile} />
                 )
             }
         </div>
