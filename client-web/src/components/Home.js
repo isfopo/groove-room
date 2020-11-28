@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useCookies } from 'react-cookie';
 
 import { Login } from './Login.js';
+import { DisplayProfiles } from './DisplayProfiles.js';
 import { LeftSidebar } from './LeftSidebar.js';
 import { RightSidebar } from './RightSidebar.js';
 
@@ -38,13 +39,18 @@ export const Home = (props) => {
     return (
         <div>
             { !cookies.user ?
-                <Login /> 
+                <>
+                    <h1>Groove Room</h1>
+                    <Login /> 
+                </>
             :
                 <>
-                    <p>{currentRoom.name}</p>
                     <LeftSidebar 
                         currentRoom={currentRoom}
                         setCurrentRoom={handleSetCurrentRoom}
+                    />
+                    <DisplayProfiles 
+                        currentRoom={currentRoom}
                     />
                     <RightSidebar />
                     <button onClick={() => props.history.push('/log-out')}>Log Out</button>
