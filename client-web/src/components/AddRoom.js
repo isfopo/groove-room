@@ -38,7 +38,8 @@ export const AddRoom = (props) => {
             method: "POST",
             body: JSON.stringify({
                 room_name: roomName,
-                creator_id: cookies.user.id
+                id: cookies.user.id,
+                image: cookies.user.image
             })
         })
             .then(res => res.json())
