@@ -45,7 +45,7 @@ export const Profile = (props) => {
         <div className={`profile ${ props.profile.id === cookies.user.id && 'active'}`}>
 
             <img key={props.profile.id} src={props.profile.image} alt="profile" />
-            <div className="tag" onMouseEnter={() => setReadyToType(true)} onMouseLeave={() => lastMessage && setReadyToType(false)}>
+            <div className="tag" onMouseEnter={() => setReadyToType(true)} onMouseLeave={() => lastMessage && !newMessage && setReadyToType(false)}>
                 { !readyToType ?
                     <p className="message">{lastMessage}</p>
                 :
@@ -55,7 +55,15 @@ export const Profile = (props) => {
                             type="text"
                             value={newMessage}
                             placeholder="Type a message..."
-                            onChange={ e => setNewMessage(e.target.value) } 
+                            onChange={ e => {
+                                if (e.target.value) {
+                                    setNewMessage(e.target.value)
+                                } else {
+                                    setNewMessage(e.target.value)
+                                    setReadyToType(false) } 
+                                }
+
+                            }
                         />
                     </form>
                 }
