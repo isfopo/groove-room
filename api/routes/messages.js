@@ -8,10 +8,15 @@ const Message = require('../db/models').Message;
 
 
 // GET all messages from a Profile
-router.get('/profile/:id', async (req, res) => {
+router.get('/last/:id', async (req, res) => {
+    console.log(req.params.id)
 
-
-    res.json(messages);
+    const allMessages = await Message.findAll({
+        where: {
+            profile_id: req.params.id
+        }
+    })
+    res.json(allMessages[allMessages.length - 1]);
 })
 
 // GET all messages in Room
@@ -30,12 +35,12 @@ router.post('/create', async (req, res) => {
         sentiment: getSentiment(req.body.content)
     })
 
-    res.json(message)
+    res.sendStatus(200);
 })
 
 // GET average sentiment of all Messages in room
 router.get('/average-sentiment', async (req, res) => {
-    
+
 })
 
 module.exports = router;
