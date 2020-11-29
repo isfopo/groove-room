@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Profile } from './Profile';
 
-export const DisplayProfiles = (props) => {
+export const Room = (props) => {
 
     const [profiles, setProfiles] = useState([])
 

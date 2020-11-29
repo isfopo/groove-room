@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { useCookies } from 'react-cookie';
 
+import '../styles/Profile.css';
+
 export const Profile = (props) => {
 
-    const [newMessage, setNewMessage] = useState('')
-    const [lastMessage, setLastMessage] = useState({})
-    const [messages, setMessages] = useState([])
+    const [newMessage, setNewMessage] = useState('');
+    const [lastMessage, setLastMessage] = useState({});
+    const [messages, setMessages] = useState([]);
 
     const [cookies] = useCookies();
 
@@ -44,7 +46,8 @@ export const Profile = (props) => {
                     type="text"
                     value={newMessage}
                     placeholder="Type a message..."
-                    onChange={e => setNewMessage(e.target.value)} />
+                    onChange={ e => setNewMessage(e.target.value) } 
+                />
             </form>
         </div>
     )

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useCookies } from 'react-cookie';
 
 import { Login } from './Login.js';
-import { DisplayProfiles } from './DisplayProfiles.js';
+import { Room } from './Room.js';
 import { LeftSidebar } from './LeftSidebar.js';
 import { RightSidebar } from './RightSidebar.js';
 
@@ -49,7 +49,7 @@ export const Home = (props) => {
                         currentRoom={currentRoom}
                         setCurrentRoom={handleSetCurrentRoom}
                     />
-                    <DisplayProfiles 
+                    <Room 
                         currentRoom={currentRoom}
                     />
                     <RightSidebar />
