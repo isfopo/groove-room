@@ -7,6 +7,10 @@ module.exports = (sequelize) => {
       content: {
         type: Sequelize.STRING,
         allowNull: false
+      },
+      sentiment: {
+        type: Sequelize.FLOAT,
+        allowNull: true
       }
   }, { sequelize });
 

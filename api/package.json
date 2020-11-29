@@ -6,6 +6,7 @@
     "start": "nodemon ./bin/www"
   },
   "dependencies": {
+    "apos-to-lex-form": "^1.0.5",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
     "debug": "~2.6.9",
@@ -14,10 +15,13 @@
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
     "morgan": "~1.9.1",
+    "natural": "^2.1.5",
     "node-fetch": "^2.6.1",
     "request": "^2.88.2",
     "sequelize": "^6.3.5",
     "sequelize-cli": "^6.2.0",
-    "sqlite3": "^5.0.0"
+    "spelling-corrector": "^3.0.0",
+    "sqlite3": "^5.0.0",
+    "stopword": "^1.0.3"
   }
 }
