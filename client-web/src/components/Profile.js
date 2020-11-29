@@ -5,10 +5,23 @@ export const Profile = (props) => {
 
     const [readyToType, setReadyToType] = useState(0);
     const [newMessage, setNewMessage] = useState('');
-    const [lastMessage, setLastMessage] = useState({});
+    const [lastMessage, setLastMessage] = useState('');
     const [messages, setMessages] = useState([]);
 
     const [cookies] = useCookies();
+
+    useEffect(() => {
+        fetch(`http://localhost:3001/messages/last/${props.profile.id}`)
+            .then(res => res.json())
+            .then(res => {
+                if (res.status === 200)
+                {
+                    setLastMessage(res.dataValues.content)
+                } else {
+                    setReadyToType(true)
+                } 
+            })
+    }, [props.profile, newMessage])
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -28,19 +41,13 @@ export const Profile = (props) => {
         setReadyToType(false);
     }
 
-    useEffect(() => {
-        fetch(`http://localhost:3001/messages/last/${props.profile.id}`)
-            .then(res => res.json())
-            .then(res => setLastMessage(res))
-    }, [props.profile, newMessage])
-
     return (
         <div className={`profile ${ props.profile.id === cookies.user.id && 'active'}`}>
 
             <img key={props.profile.id} src={props.profile.image} alt="profile" />
-            <div className="tag" onMouseEnter={() => setReadyToType(true)} onMouseLeave={() => setReadyToType(false)}>
+            <div className="tag" onMouseEnter={() => setReadyToType(true)} onMouseLeave={() => lastMessage && setReadyToType(false)}>
                 { !readyToType ?
-                    <p className="message">{lastMessage.content}</p>
+                    <p className="message">{lastMessage}</p>
                 :
                     <form onSubmit={handleSubmit}>
                         <input 
