@@ -4,6 +4,7 @@ import { useCookies } from 'react-cookie';
 import add from '../icons/add-24px.svg';
 import join from '../icons/group-24px.svg';
 import back from '../icons/arrow_back_ios-24px.svg';
+import list from '../icons/list-24px.svg';
 
 import '../styles/Sidebar.css';
 
@@ -21,6 +22,7 @@ export const LeftSidebar = (props) => {
 
     return (
         <div className="sidebar left">
+
             <div className='room-display' >
                 {
                     activeRooms.map( room => 
@@ -39,6 +41,7 @@ export const LeftSidebar = (props) => {
             <a href="/add-room">
                 <img src={ add } alt="add" />
             </a>
+            <img className="handle handle-left" src={ list } alt="list" />
         </div>
     )
 }
