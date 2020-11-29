@@ -9,14 +9,23 @@ const Message = require('../db/models').Message;
 
 // GET all messages from a Profile
 router.get('/last/:id', async (req, res) => {
-    console.log(req.params.id)
 
     const allMessages = await Message.findAll({
         where: {
             profile_id: req.params.id
         }
     })
-    res.json(allMessages[allMessages.length - 1]);
+    if (allMessages.length === 0 )
+    {
+        res.json({
+            status: 404
+        })
+    } else {
+        res.json({
+            status: 200,
+            ...allMessages[allMessages.length - 1]
+        })
+    }
 })
 
 // GET all messages in Room
