@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useCookies } from 'react-cookie';
 
+import { RoomLineItem } from './RoomLineItem';
+
 import add from '../icons/add-24px.svg';
 import join from '../icons/group-24px.svg';
 import back from '../icons/arrow_back_ios-24px.svg';
@@ -26,11 +28,13 @@ export const LeftSidebar = (props) => {
             <div className='room-display' >
                 {
                     activeRooms.map( room => 
-                        <p 
-                            key={room.id}
-                            className={`room-name ${ room === props.currentRoom && 'active' }`}
-                            onClick={() => props.setCurrentRoom(room)}
-                        >{room.name}</p>
+                    <div 
+                        key={room.id} 
+                        className={`room-line-item ${ room === props.currentRoom && 'active' }`}
+                        onClick={() => props.setCurrentRoom(room)}
+                    >
+                        <RoomLineItem room={room} />
+                    </div>
                     )
                 }
             </div>
