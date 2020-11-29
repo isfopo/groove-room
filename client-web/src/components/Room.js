@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Profile } from './Profile';
 
+import '../styles/Room.css';
+
 export const Room = (props) => {
 
     const [profiles, setProfiles] = useState([])
@@ -12,7 +14,7 @@ export const Room = (props) => {
     }, [props.currentRoom])
 
     return (
-        <div className="profile-display">
+        <div className="room">
             {
                 profiles.map( profile => 
                     <Profile key={profile.id} profile={profile} />
