@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useCookies } from 'react-cookie';
 
-import '../styles/Profile.css';
-
 export const Profile = (props) => {
 
+    const [readyToType, setReadyToType] = useState(0);
     const [newMessage, setNewMessage] = useState('');
     const [lastMessage, setLastMessage] = useState({});
     const [messages, setMessages] = useState([]);
@@ -26,6 +25,7 @@ export const Profile = (props) => {
         })
 
         setNewMessage('');
+        setReadyToType(false);
     }
 
     useEffect(() => {
@@ -38,17 +38,21 @@ export const Profile = (props) => {
         <div className={`profile ${ props.profile.id === cookies.user.id && 'active'}`}>
 
             <img key={props.profile.id} src={props.profile.image} alt="profile" />
-
-            <p>{lastMessage.content}</p>
-
-            <form onSubmit={handleSubmit}>
-                <input 
-                    type="text"
-                    value={newMessage}
-                    placeholder="Type a message..."
-                    onChange={ e => setNewMessage(e.target.value) } 
-                />
-            </form>
+            <div className="tag" onMouseEnter={() => setReadyToType(true)} onMouseLeave={() => setReadyToType(false)}>
+                { !readyToType ?
+                    <p className="message">{lastMessage.content}</p>
+                :
+                    <form onSubmit={handleSubmit}>
+                        <input 
+                            className="input"
+                            type="text"
+                            value={newMessage}
+                            placeholder="Type a message..."
+                            onChange={ e => setNewMessage(e.target.value) } 
+                        />
+                    </form>
+                }
+            </div>
         </div>
     )
 }
