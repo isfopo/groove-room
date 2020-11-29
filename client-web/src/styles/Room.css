@@ -1,0 +1,19 @@
+.room {
+    display: flex;
+    justify-content: center;
+}
+
+.tag {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.message {
+    margin: auto;
+}
+
+.input {
+    margin: auto;
+}
