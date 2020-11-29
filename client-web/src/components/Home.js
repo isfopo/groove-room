@@ -12,7 +12,7 @@ export const Home = (props) => {
 
     const [cookies, setCookie, removeCookie] = useCookies();
 
-    const [token, setToken] = useState(cookies.spotify_auth.access_token)
+    const [token, setToken] = useState(cookies.spotify_auth && cookies.spotify_auth.access_token); // TODO: get refresh token when needed
     const [currentRoom, setCurrentRoom] = useState({});
     
     useEffect(() => {
