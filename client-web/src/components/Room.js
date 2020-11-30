@@ -13,8 +13,6 @@ export const Room = (props) => {
 
     const [cookies] = useCookies();
 
-    // TODO: only show users the rooms they are a part of
-
     useEffect(() => {
         fetch(`http://localhost:3001/profiles/${currentRoom.id}`)
             .then(res => res.json())

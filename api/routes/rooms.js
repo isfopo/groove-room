@@ -52,9 +52,23 @@ router.post('/join', async (req, res) => {
     }
 })
 
-// GET all Rooms a User is a part of
+// GET all Rooms a User is a part of TODO: only show users the rooms they are a part of
 router.get('/:user', async (req, res) => {
-    const userRooms = await Room.findAll()
+
+    const userRooms = []
+
+    let userProfiles = await Profile.findAll({
+        where: {
+            user_id: req.params.user
+        }
+    })
+    userProfiles = userProfiles.map(result => result.dataValues)
+    
+    for ( let i = 0; i < userProfiles.length; i++ ) {
+        const room = await Room.findByPk(userProfiles[i].room_id);
+        userRooms.push(room)
+    }
+
     res.json(userRooms)
 })
 
