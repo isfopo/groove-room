@@ -5,6 +5,8 @@ import more from '../icons/more_vert-24px.svg'
 
 export const RoomLineItem = (props) => {
 
+    const { room, profile } = props;
+    
     const [showMenu, setShowMenu] = useState(false);
 
     return (
@@ -14,10 +16,10 @@ export const RoomLineItem = (props) => {
 
             { showMenu &&
                 <div className='room-menu' >
-                    <a href={`/invite/${queryString.stringify(props.room)}`}>Invite</a><br />
-                    <a href={`/rename/${queryString.stringify(props.room)}`}>Rename</a><br />
-                    <a href={`/leave/${queryString.stringify(props.profile)}`}>Leave</a><br />
-                    <a href={`/remove/${queryString.stringify(props.room)}`}>Remove</a>
+                    <a href={`/invite/${queryString.stringify(room)}`}>Invite</a><br />
+                    <a href={`/rename/${queryString.stringify(room)}`}>Rename</a><br />
+                    <a href={`/leave/${queryString.stringify({ room, profile})}`}>Leave</a><br />
+                    <a href={`/remove/${queryString.stringify(room)}`}>Remove</a>
                 </div>
             }
         </div>
