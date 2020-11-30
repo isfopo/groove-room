@@ -3,9 +3,9 @@ import { Profile } from './Profile';
 import { useCookies } from 'react-cookie';
 
 import '../styles/Room.css';
-import { Cookies } from 'react-cookie';
 
 export const Room = (props) => {
+
 
     const [profiles, setProfiles] = useState([]);
 
@@ -30,7 +30,7 @@ export const Room = (props) => {
         <div className="room">
             {
                 profiles.map( profile => 
-                    <Profile key={profile.id} profile={props.profile} />
+                    <Profile key={profile.id} profile={profile} />
                 )
             }
         </div>
