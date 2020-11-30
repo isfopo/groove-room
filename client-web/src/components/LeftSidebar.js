@@ -31,10 +31,10 @@ export const LeftSidebar = (props) => {
                     activeRooms.map( room => 
                     <div 
                         key={room.id} 
-                        className={`room-line-item ${ room === props.currentRoom && 'active' }`}
+                        className={`room-line-item`}
                         onClick={() => props.setCurrentRoom(room)}
                     >
-                        <RoomLineItem room={room} profile={props.profile} />
+                        <RoomLineItem room={room} profile={props.profile} active={room === props.currentRoom}/>
                     </div>
                     )
                 }

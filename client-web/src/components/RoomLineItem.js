@@ -5,14 +5,16 @@ import more from '../icons/more_vert-24px.svg'
 
 export const RoomLineItem = (props) => {
 
-    const { room, profile } = props;
+    const { room, profile, active } = props;
     
     const [showMenu, setShowMenu] = useState(false);
 
     return (
-        <div onMouseLeave={() => setShowMenu(false)}>
+        <div className={`${active && "active"}`} onMouseLeave={() => setShowMenu(false)}>
             <p>{props.room.name}</p>
-            <img onMouseEnter={() => setShowMenu(true)} src={ more } alt="more" />
+            { active &&
+                <img onMouseEnter={() => setShowMenu(true)} src={ more } alt="more" />
+            }
 
             { showMenu &&
                 <div className='room-menu' >
