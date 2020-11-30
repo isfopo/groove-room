@@ -53,7 +53,7 @@ export const AddRoom = (props) => {
                     <input 
                         type="text"
                         value={roomName}
-                        placeholder="enter room id"
+                        placeholder="enter room name"
                         onChange={e => setRoomName(e.target.value)} />
                     <input type="submit" value="Submit" />
                 </form>
