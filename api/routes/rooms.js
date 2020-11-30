@@ -65,7 +65,16 @@ router.put('/invite', async (req, res) => {
     roomToRename.name = req.body.room_name;
     roomToRename.save();
 
-    res.json(req.body)
+    res.json(roomToRename)
+})
+
+// DELETE a room by id
+router.delete('/delete', async (req, res) => {
+
+    const roomToDelete = await Room.findByPk(req.body.room_id);
+    await roomToDelete.destroy();
+
+    res.json({status: 200})
 })
 
 module.exports = router;
