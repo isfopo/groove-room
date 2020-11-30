@@ -17,10 +17,22 @@ router.get('/:room_id', async (req, res) => {
 // DELETE Profile
 router.delete('/delete', async (req, res) => {
 
+    // find profile to delete
     const profileToDelete = await Profile.findByPk(req.body.profile_id);
     await profileToDelete.destroy();
+    
+    // check of other profiles with that room id
+    const otherProfilesInRoom = await Profile.findAll({
+        where: {
+            room_id: req.body.room_id
+        }
+    })
 
-    // TODO: if room is empty, delete that as well
+    // if there are none, delete room
+    if ( otherProfilesInRoom.length === 0 ) {
+        const roomToDelete = await Room.findByPk(req.body.room_id);
+        await roomToDelete.destroy();
+    }
 
     res.json({status: 200})
 })
