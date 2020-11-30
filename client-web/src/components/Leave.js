@@ -7,7 +7,7 @@ export const Leave = (props) => {
 
     // TODO: allow user to leave room
 
-    const [profile] = useState(queryString.parse(props.match.params.room))
+    const [data] = useState(queryString.parse(props.match.params.room));
     const [confirmed, setConfirmed] = useState(false);
 
     const leaveRoom = () => {
@@ -17,7 +17,8 @@ export const Leave = (props) => {
             },
             method: "DELETE",
             body: JSON.stringify({
-                profile_id: profile.id
+                profile_id: data.profile_id,
+                room_id: data.room_id
             })
         })
             .then(res => res.json())
@@ -34,7 +35,7 @@ export const Leave = (props) => {
         <div className="leave">
             { !confirmed ?
                 <>
-                    <p>Are you sure you want to leave "{/*room.name TODO: get room info from querystring and place name here*/}"?</p>
+                    <p>Are you sure you want to leave "{data.room_name}"?</p>
                     <button onClick={leaveRoom}>Yes</button>
                 </>
             :
