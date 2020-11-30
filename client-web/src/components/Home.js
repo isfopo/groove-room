@@ -14,7 +14,12 @@ export const Home = (props) => {
 
     const [token, setToken] = useState(cookies.spotify_auth && cookies.spotify_auth.access_token); // TODO: get refresh token when needed
     const [currentRoom, setCurrentRoom] = useState({});
+    const [profile, setProfile] = useState({});
     
+    const handleSetProfile = (profile) => {
+        setProfile(profile)
+    }
+
     useEffect(() => {
         const spotifyApi = new SpotifyWebApi();
         spotifyApi.setAccessToken(token);
@@ -55,9 +60,12 @@ export const Home = (props) => {
                     <LeftSidebar 
                         currentRoom={currentRoom}
                         setCurrentRoom={handleSetCurrentRoom}
+                        profile={profile}
                     />
                     <Room 
                         currentRoom={currentRoom}
+                        profile={profile}
+                        setProfile={handleSetProfile}
                     />
                     <RightSidebar />
                     <button onClick={handleLogOut}>Log Out</button>

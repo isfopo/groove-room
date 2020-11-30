@@ -1,25 +1,36 @@
 import React, { useEffect, useState } from 'react'
 import { Profile } from './Profile';
+import { useCookies } from 'react-cookie';
 
 import '../styles/Room.css';
+import { Cookies } from 'react-cookie';
 
 export const Room = (props) => {
 
-    const [profiles, setProfiles] = useState([])
+    const [profiles, setProfiles] = useState([]);
+
+    const { currentRoom , setProfile } = props
+
+    const [cookies] = useCookies();
 
     // TODO: only show users the rooms they are a part of
 
     useEffect(() => {
-        fetch(`http://localhost:3001/profiles/${props.currentRoom.id}`)
+        fetch(`http://localhost:3001/profiles/${currentRoom.id}`)
             .then(res => res.json())
             .then(res => setProfiles(res))
-    }, [props.currentRoom])
+    }, [currentRoom])
+    
+    useEffect(() => {
+        const [ user_profile ] = profiles.filter(profile => profile.user_id === cookies.user.id)
+        setProfile(user_profile);
+    }, [setProfile, profiles, cookies.user.id])
 
     return (
         <div className="room">
             {
                 profiles.map( profile => 
-                    <Profile key={profile.id} profile={profile} />
+                    <Profile key={profile.id} profile={props.profile} />
                 )
             }
         </div>

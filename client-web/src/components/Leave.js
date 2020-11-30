@@ -1,12 +1,48 @@
-import React from 'react'
+import React, { useState } from 'react'
+import queryString from 'query-string';
 
-export const Leave = () => {
+import back from '../icons/arrow_back_ios-24px.svg';
+
+export const Leave = (props) => {
 
     // TODO: allow user to leave room
 
+    const [profile] = useState(queryString.parse(props.match.params.room))
+    const [confirmed, setConfirmed] = useState(false);
+
+    const leaveRoom = () => {
+        fetch('http://localhost:3001/profiles/delete', {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: "DELETE",
+            body: JSON.stringify({
+                profile_id: profile.id
+            })
+        })
+            .then(res => res.json())
+            .then(res => {
+                console.log(res)
+                setConfirmed(true)
+                setTimeout(() => {
+                    props.history.push('/');
+                }, 3000)
+            })
+    } 
+
     return (
-        <div>
-            
+        <div className="leave">
+            { !confirmed ?
+                <>
+                    <p>Are you sure you want to leave "{/*room.name TODO: get room info from querystring and place name here*/}"?</p>
+                    <button onClick={leaveRoom}>Yes</button>
+                </>
+            :
+                <p>Left room!</p>
+            }
+            <a href="/">
+                <img src={back} alt="back"/>
+            </a>
         </div>
     )
 }

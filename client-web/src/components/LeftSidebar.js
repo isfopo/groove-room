@@ -11,6 +11,8 @@ import '../styles/Sidebar.css';
 
 export const LeftSidebar = (props) => {
 
+    // TODO: only allow active room to have menu
+    
     const [activeRooms, setActiveRooms] = useState([]);
 
     const [cookies] = useCookies();
@@ -32,7 +34,7 @@ export const LeftSidebar = (props) => {
                         className={`room-line-item ${ room === props.currentRoom && 'active' }`}
                         onClick={() => props.setCurrentRoom(room)}
                     >
-                        <RoomLineItem room={room} />
+                        <RoomLineItem room={room} profile={props.profile} />
                     </div>
                     )
                 }
