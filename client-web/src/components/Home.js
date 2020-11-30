@@ -16,24 +16,29 @@ export const Home = (props) => {
     const [currentRoom, setCurrentRoom] = useState({});
     
     useEffect(() => {
-        const spotifyApi = new SpotifyWebApi();
-        spotifyApi.setAccessToken(token);
-        spotifyApi.getMe()
-            .then( async (data) => {
-                fetch('http://localhost:3001/users', {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    method: "POST",
-                    body: JSON.stringify(data)
+        if (!cookies.user) {
+            const spotifyApi = new SpotifyWebApi();
+            spotifyApi.setAccessToken(token);
+            spotifyApi.getMe()
+                .then( async (data) => {
+                    fetch('http://localhost:3001/users', {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        method: "POST",
+                        body: JSON.stringify(data)
+                    })
+                    .then(res => res.json())
+                    .then(res => setCookie("user", res[0]))
                 })
-                .then(res => res.json())
-                .then(res => setCookie("user", res[0]))
-            })
+        }
     }, [token])
 
     const handleLogOut = () => {
         removeCookie("user", {path: '/'});
+        removeCookie("spotify_auth", {path: '/'});
+        removeCookie("spotify_auth_state", {path: '/'});
+        props.history.push('/log-out')
     }
 
     const handleSetCurrentRoom = (room) => {
