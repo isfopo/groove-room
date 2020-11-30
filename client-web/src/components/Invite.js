@@ -25,34 +25,33 @@ export const Invite = (props) => {
 
     return (
         <div className='invite'>
-        {
-                    document.queryCommandSupported('copy') &&
-                        <div>
-                            <button onClick={copyToClipboard}>
-                                { !copied ?
-                                    <img src={copy} alt="copy"/>
-                                :
-                                    <img src={done} alt="done"/>
-                                }
-                            </button> 
-                        </div>
-                    }
-                    <a target="_blank" rel="noreferrer"
-                        href={`mailto:?${
-                        queryString.stringify({
-                            subject: "Groove Room Id",
-                            body: `You are invited to join ${room.name}! Copy "${room.id}" in "Join Room"`
-                        })
-                    }`}>
-                        <img src={share} alt="share" />
-                    </a>
-                    <form >
-                        <textarea
-                        readOnly
-                        ref={textAreaRef}
-                        value={room.id}
-                        />
-                    </form>
+            { document.queryCommandSupported('copy') &&
+                    <div>
+                        <button onClick={copyToClipboard}>
+                            { !copied ?
+                                <img src={copy} alt="copy"/>
+                            :
+                                <img src={done} alt="done"/>
+                            }
+                        </button> 
+                    </div>
+            }
+                <a target="_blank" rel="noreferrer"
+                    href={`mailto:?${
+                    queryString.stringify({
+                        subject: "Groove Room Id",
+                        body: `You are invited to join ${room.name}! Copy "${room.id}" in "Join Room"`
+                    })
+                }`}>
+                    <img src={share} alt="share" />
+                </a>
+                <form >
+                    <textarea
+                    readOnly
+                    ref={textAreaRef}
+                    value={room.id}
+                    />
+                </form>
             <a href="/">
                 <img src={back} alt="back"/>
             </a>
