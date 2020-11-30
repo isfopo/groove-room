@@ -7,6 +7,8 @@ export const Room = (props) => {
 
     const [profiles, setProfiles] = useState([])
 
+    // TODO: only show users the rooms they are a part of
+
     useEffect(() => {
         fetch(`http://localhost:3001/profiles/${props.currentRoom.id}`)
             .then(res => res.json())
