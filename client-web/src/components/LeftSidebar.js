@@ -5,7 +5,6 @@ import { RoomLineItem } from './RoomLineItem';
 
 import add from '../icons/add-24px.svg';
 import join from '../icons/group-24px.svg';
-import back from '../icons/arrow_back_ios-24px.svg';
 import list from '../icons/list-24px.svg';
 
 import '../styles/Sidebar.css';
@@ -38,7 +37,6 @@ export const LeftSidebar = (props) => {
                     )
                 }
             </div>
-            <img src={ back } alt="back" />
             <a href="/join-room">
                 <img src={ join } alt="join" />
             </a>
