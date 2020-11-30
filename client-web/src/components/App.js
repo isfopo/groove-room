@@ -6,13 +6,15 @@ import { Home } from './Home.js'
 import { RedirectPage } from './RedirectPage.js';
 import { AddRoom } from './AddRoom.js';
 import { JoinRoom } from './JoinRoom.js';
+
 import { LogOut } from './LogOut.js';
+
 import { Invite } from './Invite.js';
 import { Rename } from './Rename.js';
+import { Leave } from './Leave.js';
 import { Remove } from './Remove.js';
 
-function App() {
-
+export const App = () => {
   return (
     <div className="main">
       <CookiesProvider>
@@ -23,6 +25,7 @@ function App() {
           <Route path="/log-out" component={ LogOut } />
           <Route path="/invite/:room" component={ Invite } />
           <Route path="/rename/:room" component={ Rename } />
+          <Route path="/leave/:room" component={ Leave } />
           <Route path="/remove/:room" component={ Remove } />
           <Route exact path="/" component={ Home } />
         </BrowserRouter>
@@ -30,5 +33,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
