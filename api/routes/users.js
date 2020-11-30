@@ -14,9 +14,14 @@ router.post('/', async (req, res) => {
       name: req.body.display_name
     }
   });
-  
-  user[0].image = req.body.images[0].url;
-  await user[0].save();
+
+  if (req.body.images.length > 0) {
+    user[0].image = req.body.images[0].url;
+    await user[0].save();
+  } else {
+    user[0].image = '/images/default-profile.png';
+    await user[0].save();
+  }
 
   res.json(user);
 });
