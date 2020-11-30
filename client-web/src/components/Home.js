@@ -32,6 +32,10 @@ export const Home = (props) => {
             })
     }, [token])
 
+    const handleLogOut = () => {
+        removeCookie("user", {path: '/'});
+    }
+
     const handleSetCurrentRoom = (room) => {
         setCurrentRoom(room)
     }
@@ -53,7 +57,7 @@ export const Home = (props) => {
                         currentRoom={currentRoom}
                     />
                     <RightSidebar />
-                    <button onClick={() => props.history.push('/log-out')}>Log Out</button>
+                    <button onClick={handleLogOut}>Log Out</button>
                 </>
             }
         </div>
