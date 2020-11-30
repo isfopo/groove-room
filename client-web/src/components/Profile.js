@@ -42,11 +42,11 @@ export const Profile = (props) => {
     }
 
     return (
-        <div className={`profile ${ props.profile.id === cookies.user.id && 'active'}`}>
+        <div className={`profile ${ props.profile.user_id === cookies.user.id && 'active'}`}>
 
             <img key={props.profile.id} src={props.profile.image} alt="profile" />
             <div className="tag" onMouseEnter={() => setReadyToType(true)} onMouseLeave={() => lastMessage && !newMessage && setReadyToType(false)}>
-                { !readyToType ?
+                { props.profile.user_id !== cookies.user.id || !readyToType ?
                     <p className="message">{lastMessage}</p>
                 :
                     <form onSubmit={handleSubmit}>
