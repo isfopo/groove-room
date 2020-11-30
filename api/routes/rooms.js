@@ -4,8 +4,8 @@ var Room = require('../db/models').Room;
 var Profile = require('../db/models').Profile;
 const { Op } = require("sequelize");
 
-/* POST create new room */
-router.post('/create', async (req, res) => {
+// POST create new room
+router.post('/create', async (req, res) => { // TODO: give room ids a hashed value
     const room = await Room.create({
         name: req.body.room_name,
         skip_vote: 0
@@ -20,10 +20,9 @@ router.post('/create', async (req, res) => {
     res.json(room);
 });
 
-/* POST find and join existing room */
+// POST find and join existing room
 router.post('/join', async (req, res) => {
 
-    // check if user already has a profile in requested room (profile has the same user_id and room_id)
     const userInRoom = await Profile.findAll({
         where: {
             [Op.and]: {
@@ -33,7 +32,6 @@ router.post('/join', async (req, res) => {
         }
     })
 
-    // check if requested room exists
     const roomExists = await Room.findAll({
         where: {
             id: req.body.room_id
@@ -41,13 +39,10 @@ router.post('/join', async (req, res) => {
     })
 
     if ( userInRoom.length > 0 ) {
-        // if user is already in room, return "Not Modified"
         res.sendStatus(304);
     } else if ( roomExists.length === 0 ) {
-        // if room does not exist, return "Not Found"
         res.sendStatus(404);
     } else {
-        // is false, create profile with room_id and return confirmation message
         const addProfileToRoom = await Profile.create({
             user_id: req.body.user_id,
             image: req.body.image,
@@ -57,10 +52,20 @@ router.post('/join', async (req, res) => {
     }
 })
 
-/* GET all Rooms a User is a part of */
+// GET all Rooms a User is a part of
 router.get('/:user', async (req, res) => {
     const userRooms = await Room.findAll()
     res.json(userRooms)
+})
+
+// PUT a new name into a room
+router.put('/invite', async (req, res) => {
+
+    const roomToRename = await Room.findByPk(req.body.room_id);
+    roomToRename.name = req.body.room_name;
+    roomToRename.save();
+
+    res.json(req.body)
 })
 
 module.exports = router;
