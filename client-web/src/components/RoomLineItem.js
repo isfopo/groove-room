@@ -20,7 +20,13 @@ export const RoomLineItem = (props) => {
                 <div className='room-menu' >
                     <a href={`/invite/${queryString.stringify(room)}`}>Invite</a><br />
                     <a href={`/rename/${queryString.stringify(room)}`}>Rename</a><br />
-                    <a href={`/leave/${queryString.stringify({ room, profile})}`}>Leave</a><br />
+
+                    <a href={`/leave/${queryString.stringify({
+                        room_id: room.id,
+                        room_name: room.name,
+                        profile_id: profile.id
+                    })}`}>Leave</a><br />
+
                     <a href={`/remove/${queryString.stringify(room)}`}>Remove</a>
                 </div>
             }
