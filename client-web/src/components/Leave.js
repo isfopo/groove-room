@@ -5,8 +5,6 @@ import back from '../icons/arrow_back_ios-24px.svg';
 
 export const Leave = (props) => {
 
-    // TODO: allow user to leave room
-
     const [data] = useState(queryString.parse(props.match.params.room));
     const [confirmed, setConfirmed] = useState(false);
 
