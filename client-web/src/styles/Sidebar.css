@@ -7,7 +7,7 @@
 }
 
 .left {
-    left: -29%;
+    left: -30%;
     transition: left .5s ease;
 }
 
@@ -16,7 +16,7 @@
 }
 
 .right {
-    right: -29%;
+    right: -30%;
     transition: right .5s ease;
 }
 
@@ -26,16 +26,19 @@
 
 .handle {
     position: fixed;
-    top: 10%;
+    top: 5%;
+    min-width: 5vh;
+    width: 5%;
+    height: auto;
     z-index: -1;
 }
 
 .handle-left {
-    left: 10%;
+    left: 5%;
 }
 
 .handle-right {
-    right: 10%;
+    right: 5%;
 }
 
 .room-display {
