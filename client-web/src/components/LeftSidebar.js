@@ -10,8 +10,6 @@ import list from '../icons/list-24px.svg';
 import '../styles/Sidebar.css';
 
 export const LeftSidebar = (props) => {
-
-    // TODO: only allow active room to have menu
     
     const [activeRooms, setActiveRooms] = useState([]);
 
