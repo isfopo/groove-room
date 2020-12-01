@@ -7,7 +7,7 @@ const { Op } = require("sequelize");
 // TODO: catch errors
 
 // POST create new room
-router.post('/create', async (req, res) => { // TODO: give room ids a hashed value
+router.post('/create', async (req, res) => {
     const room = await Room.create({
         name: req.body.room_name,
         skip_vote: 0
