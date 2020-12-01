@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var Room = require('../db/models').Room;
 var Profile = require('../db/models').Profile;
+var Message = require('../db/models').Message;
 const { Op } = require("sequelize");
 
 // TODO: catch errors
@@ -54,9 +55,45 @@ router.post('/join', async (req, res) => {
     }
 })
 
-// TODO: get average sentiment of a room
-router.get('/sentiment/:room', async (req, res) => {
-    res.json(res.params)
+// GET average sentiment of a room
+router.get('/sentiment/:room_id', async (req, res) => {
+
+    let allMessages = [];
+    let sentimentTotal = 0;
+    let sentimentCounter = 0;
+
+    // get all messages in room
+        // get all profiles in room
+    const profiles = await Profile.findAll({
+        where: {
+            room_id: req.params.room_id
+        }
+    })
+
+        // get all messages from all profiles
+
+    for ( let i = 0; i < profiles.length; i++ ) {
+        const messages = await Message.findAll({
+            where: {
+                profile_id: profiles[i].id
+            }
+        })
+
+        allMessages.push(...messages);
+    }
+
+    allMessages = allMessages.map(result => result.dataValues)
+    console.log(allMessages)
+
+    // add sentiment values together
+    allMessages.forEach( message => {
+        if (message.sentiment) {
+            sentimentCounter++;
+            sentimentTotal += message.sentiment;
+        }
+    })
+
+    res.json({ sentiment: sentimentTotal/sentimentCounter })
 })
 
 // GET all Rooms a User is a part of
