@@ -6,7 +6,6 @@ export const Profile = (props) => {
     const [readyToType, setReadyToType] = useState(0);
     const [newMessage, setNewMessage] = useState('');
     const [lastMessage, setLastMessage] = useState('');
-    const [messages, setMessages] = useState([]);
 
     const [cookies] = useCookies();
 
