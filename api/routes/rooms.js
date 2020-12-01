@@ -4,6 +4,8 @@ var Room = require('../db/models').Room;
 var Profile = require('../db/models').Profile;
 const { Op } = require("sequelize");
 
+// TODO: catch errors
+
 // POST create new room
 router.post('/create', async (req, res) => { // TODO: give room ids a hashed value
     const room = await Room.create({
@@ -45,14 +47,19 @@ router.post('/join', async (req, res) => {
     } else {
         const addProfileToRoom = await Profile.create({
             user_id: req.body.user_id,
-            image: req.body.image,
+            image: req.body.user_image,
             room_id: req.body.room_id
         })
         res.sendStatus(200)
     }
 })
 
-// GET all Rooms a User is a part of TODO: only show users the rooms they are a part of
+// TODO: get average sentiment of a room
+router.get('/sentiment/:room', async (req, res) => {
+    res.json(res.params)
+})
+
+// GET all Rooms a User is a part of
 router.get('/:user', async (req, res) => {
 
     const userRooms = []
@@ -74,7 +81,6 @@ router.get('/:user', async (req, res) => {
 
 // PUT a new name into a room
 router.put('/invite', async (req, res) => {
-
     const roomToRename = await Room.findByPk(req.body.room_id);
     roomToRename.name = req.body.room_name;
     roomToRename.save();
@@ -84,7 +90,6 @@ router.put('/invite', async (req, res) => {
 
 // DELETE a room by id
 router.delete('/delete', async (req, res) => {
-
     const roomToDelete = await Room.findByPk(req.body.room_id);
     await roomToDelete.destroy();
 
