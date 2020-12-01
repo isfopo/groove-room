@@ -28,10 +28,8 @@ router.get('/last/:id', async (req, res) => {
     }
 })
 
-// GET all messages in Room
+// TODO: GET all messages in Room
 router.get('/room/:id', async (req, res) => {
-
-
     res.json(messages);
 })
 
@@ -45,11 +43,6 @@ router.post('/create', async (req, res) => {
     })
 
     res.sendStatus(200);
-})
-
-// GET average sentiment of all Messages in room
-router.get('/average-sentiment', async (req, res) => {
-
 })
 
 module.exports = router;
