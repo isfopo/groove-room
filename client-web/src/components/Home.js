@@ -6,6 +6,10 @@ import { Room } from './Room.js';
 import { LeftSidebar } from './LeftSidebar.js';
 import { RightSidebar } from './RightSidebar.js';
 
+import '../styles/Home.css';
+
+import logout from '../icons/logout.svg'
+
 const SpotifyWebApi = require('spotify-web-api-js');
 
 export const Home = (props) => {
@@ -68,7 +72,9 @@ export const Home = (props) => {
                         setProfile={handleSetProfile}
                     />
                     <RightSidebar />
-                    <button onClick={handleLogOut}>Log Out</button>
+                    <button className='logout' onClick={handleLogOut}>
+                        <img src={logout} alt='logout' />
+                    </button>
                 </>
             }
         </div>
