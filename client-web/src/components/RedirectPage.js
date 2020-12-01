@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import { useCookies } from 'react-cookie';
-import { getParamValues } from '../utils/functions';
+import { getParamValues } from '../utils/getParamValues.js';
 
 export const RedirectPage = (props) => {
 

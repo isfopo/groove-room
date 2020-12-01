@@ -2,6 +2,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: auto;
+    width: 60%;
 }
 
 .tag {
@@ -17,4 +19,16 @@
 
 .input {
     margin: auto;
+}
+
+.profile {
+    width: 50%;
+    padding: 5%;
+}
+
+.profile img {
+    position: relative;
+    top: 0;
+    width: 100%;
+    height: auto;
 }

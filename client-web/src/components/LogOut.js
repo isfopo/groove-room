@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { useCookies } from 'react-cookie';
 
 export const LogOut = (props) => {
 
