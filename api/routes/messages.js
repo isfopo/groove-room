@@ -7,8 +7,6 @@ const Room = require('../db/models').Room;
 const Profile = require('../db/models').Profile;
 const Message = require('../db/models').Message;
 
-// TODO: handle errors
-
 // GET last message from a Profile
 router.get('/last/:id', asyncHandler( async (req, res) => {
 
