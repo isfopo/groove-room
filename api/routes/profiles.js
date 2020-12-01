@@ -3,8 +3,15 @@ var router = express.Router();
 var Room = require('../db/models').Room;
 var Profile = require('../db/models').Profile;
 
+// GET Profile by id
+router.get('/:id', async (req, res) => {
+    const profile = await Profile.findByPk(req.params.id);
+
+    res.json(profile);
+})
+
 // GET Profiles in Room
-router.get('/:room_id', async (req, res) => {
+router.get('/room/:room_id', async (req, res) => {
     const profiles = await Profile.findAll({
         where: {
             room_id: req.params.room_id
