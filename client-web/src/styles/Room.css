@@ -3,7 +3,25 @@
     justify-content: center;
     align-items: center;
     margin: auto;
+    top: 10%;
+    bottom: 10%;
     width: 60%;
+}
+
+.room .arrows {
+    position: fixed;
+    margin: auto;
+    min-width: 5vh;
+    width: 5%;
+    height: auto;
+}
+
+.room .expand {
+    bottom: 10%;
+}
+
+.room .contract {
+    top: 10%;
 }
 
 .tag {
@@ -30,5 +48,36 @@
     position: relative;
     top: 0;
     width: 100%;
+    height: auto;
+}
+
+.regular-view {
+    width: 100%;
+}
+
+.expanded-view {
+    width: 100%;
+}
+
+.all-messages {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.all-messages .message {
+    align-self: flex-start;
+    display: inline;
+    width: 100%;
+}
+
+.all-messages .active-message {
+    align-self: flex-end;
+}
+
+.thumbnail {
+    border-radius: 50%;
+    width: 10%;
     height: auto;
 }
