@@ -11,6 +11,7 @@ export const Room = (props) => {
 
     const [expanded, setExpanded] = useState(false);
     const [profiles, setProfiles] = useState([]);
+    const [messages, setMessages] = useState([]);
 
     const { currentRoom , setProfile } = props
 
@@ -27,8 +28,15 @@ export const Room = (props) => {
         setProfile(user_profile);
     }, [setProfile, profiles, cookies.user.id])
 
+    const getAllMessages = () => {
+        fetch(`http://localhost:3001/messages/room/${currentRoom.id}`)
+            .then(res => res.json())
+            .then(res => setMessages(res))
+    }
+
     const more = () => {
         setExpanded(true);
+        getAllMessages();
     } 
 
     const less = () => {
