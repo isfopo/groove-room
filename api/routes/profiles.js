@@ -2,16 +2,17 @@ var express = require('express');
 var router = express.Router();
 var Room = require('../db/models').Room;
 var Profile = require('../db/models').Profile;
+const asyncHandler = require('../utils/asyncHandler.js');
 
 // GET Profile by id
-router.get('/:id', async (req, res) => {
+router.get('/:id', asyncHandler( async (req, res) => {
     const profile = await Profile.findByPk(req.params.id);
 
     res.json(profile);
-})
+}));
 
 // GET Profiles in Room
-router.get('/room/:room_id', async (req, res) => {
+router.get('/room/:room_id', asyncHandler( async (req, res) => {
     const profiles = await Profile.findAll({
         where: {
             room_id: req.params.room_id
@@ -19,10 +20,10 @@ router.get('/room/:room_id', async (req, res) => {
     })
 
     res.json(profiles)
-})
+}));
 
 // DELETE Profile
-router.delete('/delete', async (req, res) => {
+router.delete('/delete', asyncHandler( async (req, res) => {
 
     // find profile to delete
     const profileToDelete = await Profile.findByPk(req.body.profile_id);
@@ -42,6 +43,6 @@ router.delete('/delete', async (req, res) => {
     }
 
     res.json({status: 200})
-})
+}));
 
 module.exports = router;

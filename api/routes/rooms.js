@@ -4,11 +4,10 @@ var Room = require('../db/models').Room;
 var Profile = require('../db/models').Profile;
 var Message = require('../db/models').Message;
 const { Op } = require("sequelize");
-
-// TODO: catch errors
+const asyncHandler = require('../utils/asyncHandler.js');
 
 // POST create new room
-router.post('/create', async (req, res) => {
+router.post('/create', asyncHandler( async (req, res) => {
     const room = await Room.create({
         name: req.body.room_name,
         skip_vote: 0
@@ -21,10 +20,10 @@ router.post('/create', async (req, res) => {
     })
 
     res.json(room);
-});
+}));
 
 // POST find and join existing room
-router.post('/join', async (req, res) => {
+router.post('/join', asyncHandler( async (req, res) => {
 
     const userInRoom = await Profile.findAll({
         where: {
@@ -53,10 +52,10 @@ router.post('/join', async (req, res) => {
         })
         res.sendStatus(200)
     }
-})
+}));
 
 // GET average sentiment of a room
-router.get('/sentiment/:room_id', async (req, res) => {
+router.get('/sentiment/:room_id', asyncHandler( async (req, res) => {
 
     let allMessages = [];
     let sentimentTotal = 0;
@@ -94,10 +93,10 @@ router.get('/sentiment/:room_id', async (req, res) => {
     })
 
     res.json({ sentiment: sentimentTotal/sentimentCounter })
-})
+}));
 
 // GET all Rooms a User is a part of
-router.get('/:user', async (req, res) => {
+router.get('/user/:user', asyncHandler( async (req, res) => {
 
     const userRooms = []
 
@@ -114,23 +113,23 @@ router.get('/:user', async (req, res) => {
     }
 
     res.json(userRooms)
-})
+}));
 
 // PUT a new name into a room
-router.put('/invite', async (req, res) => {
+router.put('/invite', asyncHandler( async (req, res) => {
     const roomToRename = await Room.findByPk(req.body.room_id);
     roomToRename.name = req.body.room_name;
     roomToRename.save();
 
     res.json(roomToRename)
-})
+}));
 
 // DELETE a room by id
-router.delete('/delete', async (req, res) => {
+router.delete('/delete', asyncHandler( async (req, res) => {
     const roomToDelete = await Room.findByPk(req.body.room_id);
     await roomToDelete.destroy();
 
     res.json({status: 200})
-})
+}));
 
 module.exports = router;

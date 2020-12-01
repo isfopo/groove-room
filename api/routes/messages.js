@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const getSentiment = require('../utils/getSentiment.js');
+const asyncHandler = require('../utils/asyncHandler.js');
 
 const Room = require('../db/models').Room;
 const Profile = require('../db/models').Profile;
@@ -9,7 +10,7 @@ const Message = require('../db/models').Message;
 // TODO: handle errors
 
 // GET last message from a Profile
-router.get('/last/:id', async (req, res) => {
+router.get('/last/:id', asyncHandler( async (req, res) => {
 
     const allMessages = await Message.findAll({
         where: {
@@ -18,19 +19,17 @@ router.get('/last/:id', async (req, res) => {
     })
     if (allMessages.length === 0 )
     {
-        res.json({
-            status: 404
-        })
+        res.status(404).json({ message: "No messages to display" })
     } else {
         res.json({
             status: 200,
             ...allMessages[allMessages.length - 1]
         })
     }
-})
+}))
 
 // GET all messages in Room
-router.get('/room/:id', async (req, res) => {
+router.get('/room/:id', asyncHandler( async (req, res) => {
 
     const roomMessages = [];
 
@@ -52,13 +51,11 @@ router.get('/room/:id', async (req, res) => {
         roomMessages.push(...messages)
     }
 
-    // sort from oldest to newest
-
     res.json(roomMessages);
-})
+}))
 
 // POST new Message
-router.post('/create', async (req, res) => {
+router.post('/create', asyncHandler( async (req, res) => {
 
     console.log(req.body.profile_id);
     const message = await Message.create({
@@ -68,6 +65,6 @@ router.post('/create', async (req, res) => {
     })
 
     res.sendStatus(200);
-})
+}))
 
 module.exports = router;

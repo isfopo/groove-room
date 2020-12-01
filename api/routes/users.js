@@ -1,9 +1,10 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../db/models').User;
+const asyncHandler = require('../utils/asyncHandler.js');
 
 // POST new user or return existing user
-router.post('/', async (req, res) => {
+router.post('/', asyncHandler( async (req, res) => {
   const user = await User.findOrCreate({
     where: {
       name: req.body.display_name
@@ -19,6 +20,6 @@ router.post('/', async (req, res) => {
   }
 
   res.json(user);
-});
+}));
 
 module.exports = router;
