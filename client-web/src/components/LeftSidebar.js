@@ -16,7 +16,7 @@ export const LeftSidebar = (props) => {
     const [cookies] = useCookies();
 
     useEffect(() => {
-        fetch(`http://localhost:3001/rooms/${cookies.user.id}`)
+        fetch(`http://localhost:3001/rooms/user/${cookies.user.id}`)
             .then(res => res.json())
             .then(res => setActiveRooms(res))
     }, [cookies.user.id])
