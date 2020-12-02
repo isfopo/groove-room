@@ -41,7 +41,11 @@ export const AddTrack = () => {
         console.log(results)
     }, [results])
 
-        // TODO: click a result will add it to the playlist of the room
+    // TODO: click a result will add it to the playlist of the room
+        // add playlist array to room
+        // add path that finds current room, then appends given uri to playlist of room
+            // send current room to add-track in url
+            // add onclick event to li that adds uri, track name and artist name to playlist
 
     // TODO: Display recommendations using spotify api and room average sentiment, clicking adds to playlist
 
