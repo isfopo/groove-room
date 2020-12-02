@@ -9,10 +9,18 @@ module.exports = (sequelize) => {
       defaultValue: Sequelize.DataTypes.UUIDV1,
       primaryKey: true
     },
-    name: Sequelize.STRING,
-    // add playlist array (string of spotify uri)
+    name: Sequelize.DataTypes.STRING,
+    playlist: { 
+      type: Sequelize.DataTypes.STRING, 
+      get: function() {
+          return JSON.parse(this.getDataValue('playlist'));
+      }, 
+      set: function(val) {
+          return this.setDataValue('playlist', JSON.stringify(val));
+      },
+    },
     skip_vote: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.DataTypes.INTEGER,
       defaultValue: 0
     }
   }, { sequelize });
