@@ -82,7 +82,9 @@ export const Home = (props) => {
                         setProfile={handleSetProfile}
                     />
                     <button onClick={play}>Play</button>
-                    <RightSidebar />
+                    <RightSidebar 
+                        currentRoom={currentRoom}
+                    />
                     <button className='logout' onClick={handleLogOut}>
                         <img src={logout} alt='logout' />
                     </button>
