@@ -14,6 +14,7 @@ const SpotifyWebApi = require('spotify-web-api-js');
 
 export const Home = (props) => {
 
+    const spotifyApi = new SpotifyWebApi();
     const [cookies, setCookie, removeCookie] = useCookies();
 
     const [token, setToken] = useState(cookies.spotify_auth && cookies.spotify_auth.access_token); // TODO: get refresh token when needed
@@ -25,7 +26,6 @@ export const Home = (props) => {
     }
 
     useEffect(() => {
-        const spotifyApi = new SpotifyWebApi();
         spotifyApi.setAccessToken(token);
         spotifyApi.getMe()
             .then( async (data) => {
@@ -39,7 +39,17 @@ export const Home = (props) => {
                 .then(res => res.json())
                 .then(res => setCookie("user", res[0]))
             })
-    }, [token])
+
+        }, [token])
+        
+    const play = () => {
+        spotifyApi.play({
+            
+            "uris": ["spotify:track:4iV5W9uYEdYUVa79Axb7Rh"],
+            "position_ms": 80000
+        })
+
+    }
 
     const handleLogOut = () => {
         removeCookie("user", {path: '/'});
@@ -71,6 +81,7 @@ export const Home = (props) => {
                         profile={profile}
                         setProfile={handleSetProfile}
                     />
+                    <button onClick={play}>Play</button>
                     <RightSidebar />
                     <button className='logout' onClick={handleLogOut}>
                         <img src={logout} alt='logout' />
