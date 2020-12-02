@@ -124,6 +124,34 @@ router.put('/invite', asyncHandler( async (req, res) => {
     res.json(roomToRename)
 }));
 
+// PUT a new track onto playlist
+router.put('/add-track', asyncHandler( async (req, res) => {
+
+    const room = await Room.findByPk(req.body.room.id);
+
+    // get playlist and song as objects
+    const currentPlaylist = JSON.parse(room.playlist)
+    const newSong = req.body.track
+    let arrayToUpdate = []
+    
+    // combine these as object in array
+    if (room.playlist) {
+        arrayToUpdate = [ ... currentPlaylist, newSong ]
+    } else {
+        arrayToUpdate = [ newSong ]
+    }
+
+    // update as string
+
+    if (room) {
+        await room.update({
+            playlist: JSON.stringify(arrayToUpdate)
+        })
+    }
+
+    res.json(JSON.parse(room.playlist))
+}));
+
 // DELETE a room by id
 router.delete('/delete', asyncHandler( async (req, res) => {
     const roomToDelete = await Room.findByPk(req.body.room_id);
