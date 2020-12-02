@@ -6,6 +6,7 @@ import { Home } from './Home.js'
 import { RedirectPage } from './RedirectPage.js';
 import { AddRoom } from './AddRoom.js';
 import { JoinRoom } from './JoinRoom.js';
+import { AddTrack } from './AddTrack.js';
 
 import { LogOut } from './LogOut.js';
 
@@ -22,6 +23,7 @@ export const App = () => {
           <Route path="/redirect" component={ RedirectPage } />
           <Route path="/add-room" component={ AddRoom } />
           <Route path="/join-room" component={ JoinRoom } />
+          <Route path="/add-track" component={ AddTrack } />
           <Route path="/log-out" component={ LogOut } />
           <Route path="/invite/:room" component={ Invite } />
           <Route path="/rename/:room" component={ Rename } />
