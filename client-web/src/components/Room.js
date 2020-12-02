@@ -10,6 +10,9 @@ import { Message } from './Message';
 
 export const Room = (props) => {
 
+    // TODO: start playing room's current song on spotify
+        // fetch current song uri and position_ms from db
+
     const [expanded, setExpanded] = useState(false);
     const [profiles, setProfiles] = useState([]);
     const [messages, setMessages] = useState([]);
