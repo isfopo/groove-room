@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useCookies } from 'react-cookie';
 
+import '../styles/AddTrack.css';
+
 import back from '../icons/arrow_back_ios-24px.svg';
 
 const SpotifyWebApi = require('spotify-web-api-js');
@@ -9,21 +11,37 @@ export const AddTrack = () => {
 
     const spotifyApi = new SpotifyWebApi();
     const [query, setQuery] = useState('');
-    const [results, setResults] = useState({})
+    const [offset, setOffset] = useState(0);
+    const [results, setResults] = useState([])
 
     const [cookies] = useCookies();
     
-    // TODO: Allow user to search tracks in spotify
+    const handleScroll = (e) => {
+        const bottom = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
+        if (bottom) {
+            setOffset( offset + 50 );
+            spotifyApi.search(query, ['track'], { limit: 50, offset })
+                .then( res => setResults([ ...results , ...res.tracks.items ]))
+        }
+    
+    }
+
     useEffect(() => {
+        setOffset(0);
         spotifyApi.setAccessToken(cookies.spotify_auth.access_token);
         if (query) {
-            spotifyApi.search(query, ['track', 'artist', 'album'])
-                .then(res => setResults(res))
+            spotifyApi.search(query, ['track'], { limit: 50 })
+                .then(res => setResults(res.tracks.items))
+        } else {
+            setResults([])
         }
     }, [query])
 
-        // typing will populate a menu using a fetch to spotify api
-        // click a result will add it to the playlist of the room
+    useEffect(() => {
+        console.log(results)
+    }, [results])
+
+        // TODO: click a result will add it to the playlist of the room
 
     // TODO: Display recommendations using spotify api and room average sentiment, clicking adds to playlist
 
@@ -36,10 +54,22 @@ export const AddTrack = () => {
                 type="text"
                 value={query}
                 placeholder="Search Spotify"
-                onChange={e => setQuery(e.target.value)} />
+                onChange={ e => setQuery(e.target.value) } />
+
+            <ul className="results" onScroll={handleScroll}>
+                { results &&
+                    results.map( track => 
+                        <>
+                            <li key={track.id}>
+                                <strong>{track.name}</strong> - {track.artists[0].name}
+                            </li>
+                        </>
+                    )
+                }
+            </ul>
 
             <a href="/">
-                <img src={back} alt="back"/>
+                <img className="back" src={back} alt="back"/>
             </a>
         </div>
     )
