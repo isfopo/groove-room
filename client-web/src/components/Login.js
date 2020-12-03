@@ -14,7 +14,7 @@ export const Login = () => {
         queryString.stringify({
             client_id: REACT_APP_CLIENT_ID, 
             redirect_uri: REACT_APP_REDIRECT_URL,
-            scope: 'streaming user-read-private user-read-email user-read-playback-position user-modify-playback-state',
+            scope: 'user-read-recently-played streaming user-read-private user-read-email user-read-playback-position user-modify-playback-state',
             response_type: 'token',
             show_dialog: 'true'
         })
