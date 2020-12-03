@@ -1,3 +1,8 @@
+/**
+ * Parses parameter values for Spotify's token response url
+ * @param {string} url input url
+ */
+
 export const getParamValues = (url) => {
   return url
     .slice(1)
