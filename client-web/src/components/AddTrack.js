@@ -1,20 +1,40 @@
 import React, { useState, useEffect } from 'react'
 import { useCookies } from 'react-cookie';
 
+import queryString from 'query-string';
+
 import '../styles/AddTrack.css';
 
 import back from '../icons/arrow_back_ios-24px.svg';
 
 const SpotifyWebApi = require('spotify-web-api-js');
 
-export const AddTrack = () => {
+export const AddTrack = (props) => {
 
     const spotifyApi = new SpotifyWebApi();
+
+    const [room] = useState(queryString.parse(props.match.params.room));
     const [query, setQuery] = useState('');
     const [offset, setOffset] = useState(0);
     const [results, setResults] = useState([])
 
     const [cookies] = useCookies();
+    
+    
+    useEffect(() => {
+        setOffset(0);
+        spotifyApi.setAccessToken(cookies.spotify_auth.access_token);
+        if (query) {
+            spotifyApi.search(query, ['track'], { limit: 50 })
+            .then(res => setResults(res.tracks.items))
+        } else {
+            setResults([])
+        }
+    }, [query])
+    
+    useEffect(() => {
+        console.log(results)
+    }, [results])
     
     const handleScroll = (e) => {
         const bottom = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
@@ -23,29 +43,19 @@ export const AddTrack = () => {
             spotifyApi.search(query, ['track'], { limit: 50, offset })
                 .then( res => setResults([ ...results , ...res.tracks.items ]))
         }
-    
     }
 
-    useEffect(() => {
-        setOffset(0);
-        spotifyApi.setAccessToken(cookies.spotify_auth.access_token);
-        if (query) {
-            spotifyApi.search(query, ['track'], { limit: 50 })
-                .then(res => setResults(res.tracks.items))
-        } else {
-            setResults([])
-        }
-    }, [query])
-
-    useEffect(() => {
-        console.log(results)
-    }, [results])
-
-    // TODO: click a result will add it to the playlist of the room
-        // add playlist array to room
-        // add path that finds current room, then appends given uri to playlist of room
-            // send current room to add-track in url
-            // add onclick event to li that adds uri, track name and artist name to playlist
+    const addTrack = (track) => {
+        fetch('http://localhost:3001/rooms/add-track', {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: "PUT",
+            body: JSON.stringify({ room, track })
+        })
+            .then(res => res.json())
+            .then(res => console.log(res))
+    }
 
     // TODO: Display recommendations using spotify api and room average sentiment, clicking adds to playlist
 
@@ -64,7 +74,7 @@ export const AddTrack = () => {
                 { results &&
                     results.map( track => 
                         <>
-                            <li key={track.id}>
+                            <li key={track.id} onClick={ () => addTrack( track )} >
                                 <strong>{track.name}</strong> - {track.artists[0].name}
                             </li>
                         </>
