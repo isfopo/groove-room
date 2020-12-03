@@ -84,6 +84,7 @@ export const AddTrack = (props) => {
             .then(res => res.json())
             .then(res => console.log(res))
     }
+
     // TODO: render recently played with image, track name, artist name and album
     // TODO: render recommendations with image, track name, artist name and album
     return (
@@ -95,6 +96,38 @@ export const AddTrack = (props) => {
                 placeholder="Search Spotify"
                 onChange={ e => setQuery(e.target.value) } />
 
+            { recentlyPlayed &&
+                <div className="recent-tracks suggestions">
+                    <p>Recently Played</p>
+                    <ul>
+                        { 
+                            recentlyPlayed.map( (track, key) => 
+                                <li key={key} className="suggestion-item">
+                                    <img className="suggestion-image thumbnail" src={track.track.album.images[0].url} alt={`${track.track.album.name}'s cover`} />
+                                    <strong>{track.track.name}</strong> - {track.track.artists[0].name}
+                                </li>
+                            )
+                        }
+                    </ul>
+                </div>
+            }
+
+            { recommendations &&
+                <div className="recommendations suggestions">
+                    <p>Recommendations</p>
+                    <ul>
+                        { 
+                            recommendations.map( (track, key) => 
+                                <li key={key} className="suggestion-item">
+                                    <img className="suggestion-image thumbnail" src={track.album.images[0].url} alt={`${track.album.name}'s cover`} />
+                                    <strong>{track.name}</strong> - {track.artists[0].name}
+                                </li>
+                            )
+                        }
+                    </ul>
+                </div>
+            }
+            
             <ul className="results" onScroll={handleScroll}>
                 { results &&
                     results.map( (track, key) => 
