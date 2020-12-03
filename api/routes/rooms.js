@@ -82,7 +82,6 @@ router.get('/sentiment/:room_id', asyncHandler( async (req, res) => {
     }
 
     allMessages = allMessages.map(result => result.dataValues)
-    console.log(allMessages)
 
     // add sentiment values together
     allMessages.forEach( message => {
