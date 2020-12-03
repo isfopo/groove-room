@@ -33,7 +33,8 @@ export const RightSidebar = (props) => {
                 }
             </div>
             <a href={`/add-track/${queryString.stringify({
-                id: currentRoom.id
+                id: currentRoom.id,
+                name: currentRoom.name
             })}`}>
                 <img src={ add } alt="add" />
             </a>
