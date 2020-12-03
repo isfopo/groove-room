@@ -10,7 +10,7 @@ import '../styles/Sidebar.css';
 export const RightSidebar = (props) => {
 
     const { currentRoom } = props;
-    // TODO: Show list of songs in playlist
+
     const [playlist, setPlaylist] = useState([])
 
     useEffect(() => {
@@ -24,14 +24,17 @@ export const RightSidebar = (props) => {
             <img className="handle handle-right" src={ playlistIcon } alt="playlist" />
             <div className="playlist-display">
                 { playlist.length > 0 &&
-                    playlist.map( track => 
-                        <div key={track.id}>
+                    playlist.map( (track, key) => 
+                        <div key={key}>
+                            <img className="thumbnail" src={track.album.images[0].url} alt={`${track.album.name} cover`} />
                             <p><strong>{track.name}</strong> - {track.artists[0].name}</p>
                         </div>
                     )
                 }
             </div>
-            <a href={`/add-track/${queryString.stringify(currentRoom)}`}>
+            <a href={`/add-track/${queryString.stringify({
+                id: currentRoom.id
+            })}`}>
                 <img src={ add } alt="add" />
             </a>
             <img src={ skip } alt="skip" />
