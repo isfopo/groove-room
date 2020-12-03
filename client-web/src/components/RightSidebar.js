@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import queryString from 'query-string';
 
 import add from '../icons/playlist_add-24px.svg';
 import skip from '../icons/skip_next-24px.svg';
-import playlist from '../icons/queue_music-24px.svg';
+import playlistIcon from '../icons/queue_music-24px.svg';
 
 import '../styles/Sidebar.css';
 
@@ -11,12 +11,25 @@ export const RightSidebar = (props) => {
 
     const { currentRoom } = props;
     // TODO: Show list of songs in playlist
+    const [playlist, setPlaylist] = useState([])
+
+    useEffect(() => {
+        fetch(`http://localhost:3001/rooms/playlist/${currentRoom.id}`)
+            .then(res => res.json())
+            .then(res => setPlaylist(res))
+    }, [currentRoom])
 
     return (
         <div className="sidebar right">
-            <img className="handle handle-right" src={ playlist } alt="playlist" />
+            <img className="handle handle-right" src={ playlistIcon } alt="playlist" />
             <div className="playlist-display">
-
+                { playlist.length > 0 &&
+                    playlist.map( track => 
+                        <div key={track.id}>
+                            <p><strong>{track.name}</strong> - {track.artists[0].name}</p>
+                        </div>
+                    )
+                }
             </div>
             <a href={`/add-track/${queryString.stringify(currentRoom)}`}>
                 <img src={ add } alt="add" />
