@@ -4,7 +4,7 @@ import { getParamValues } from '../utils/getParamValues.js';
 
 export const RedirectPage = (props) => {
 
-    const [cookies, setCookie, removeCookie] = useCookies();
+    const [cookies, setCookie] = useCookies();
     
     
     useEffect(() => {
@@ -23,7 +23,7 @@ export const RedirectPage = (props) => {
 
     return (
         <div>
-            Thank you! Redirecting...
+            Signed in! Redirecting...
         </div>
     )
 }
