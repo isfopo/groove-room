@@ -115,6 +115,17 @@ router.get('/user/:user', asyncHandler( async (req, res) => {
     res.json(userRooms)
 }));
 
+// GET playlist array of objects
+router.get('/playlist/:room', asyncHandler( async (req, res) => {
+    console.log( typeof req.params.room)
+    if (req.params.room != 'undefined' ) {
+        const room = await Room.findByPk(req.params.room);
+        res.json(Object.values(JSON.parse(room.playlist)))
+    } else {
+        throw new Error("undefined");
+    }
+}))
+
 // PUT a new name into a room
 router.put('/invite', asyncHandler( async (req, res) => {
     const roomToRename = await Room.findByPk(req.body.room_id);
@@ -129,19 +140,15 @@ router.put('/add-track', asyncHandler( async (req, res) => {
 
     const room = await Room.findByPk(req.body.room.id);
 
-    // get playlist and song as objects
     const currentPlaylist = JSON.parse(room.playlist)
     const newSong = req.body.track
     let arrayToUpdate = []
-    
-    // combine these as object in array
+
     if (room.playlist) {
         arrayToUpdate = [ ... currentPlaylist, newSong ]
     } else {
         arrayToUpdate = [ newSong ]
     }
-
-    // update as string
 
     if (room) {
         await room.update({
@@ -149,7 +156,7 @@ router.put('/add-track', asyncHandler( async (req, res) => {
         })
     }
 
-    res.json(JSON.parse(room.playlist))
+    res.json({status: 200});
 }));
 
 // DELETE a room by id
@@ -157,7 +164,12 @@ router.delete('/delete', asyncHandler( async (req, res) => {
     const roomToDelete = await Room.findByPk(req.body.room_id);
     await roomToDelete.destroy();
 
-    res.json({status: 200})
+    res.json({status: 200});
 }));
+
+// DELETE first track in playlist
+router.delete('/remove-first-track/:room', asyncHandler( async (req, res) => {
+
+}))
 
 module.exports = router;
