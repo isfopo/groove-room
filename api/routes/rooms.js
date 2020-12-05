@@ -8,18 +8,20 @@ const asyncHandler = require('../utils/asyncHandler.js');
 
 // POST create new room
 router.post('/create', asyncHandler( async (req, res) => {
+
+    
     const room = await Room.create({
         name: req.body.room_name,
         skip_vote: 0
     });
-
+    
     const profile = await Profile.create({
         user_id: req.body.id,
         image: req.body.image,
         room_id: room.id
     })
-
-    res.json(room);
+    
+    res.json(room.dataValues);
 }));
 
 // POST find and join existing room
