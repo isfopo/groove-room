@@ -26,7 +26,7 @@ export const Leave = (props) => {
                 console.log(res)
                 setConfirmed(true)
                 setTimeout(() => {
-                    history.push({ pathname: '/', state: { user }});
+                    history.push({ pathname: '/', state: { user, room }});
                 }, 3000)
             })
     } 
@@ -41,7 +41,7 @@ export const Leave = (props) => {
             :
                 <p>Left room!</p>
             }
-            <button onClick={() => history.push({ pathname: '/', state: { user }})}>
+            <button onClick={() => history.push({ pathname: '/', state: { user, room }})}>
                 <img src={back} alt="back"/>
             </button>
         </div>

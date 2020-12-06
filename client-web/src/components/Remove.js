@@ -25,7 +25,7 @@ export const Remove = (props) => {
             .then(res => {
                 setConfirmed(true)
                 setTimeout(() => {
-                    history.push({ pathname: '/', state: { user }})
+                    history.push({ pathname: '/', state: { user, room }})
                 }, 3000)
             })
     }
@@ -41,7 +41,7 @@ export const Remove = (props) => {
             :
                 <p>Removed!</p>
             }
-            <button onClick={() => history.push({ pathname: '/', state: { user }})}>
+            <button onClick={() => history.push({ pathname: '/', state: { user, room }})}>
                 <img src={back} alt="back"/>
             </button>
         </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { Login } from './Login.js';
 import { Room } from './Room.js';
@@ -17,9 +17,9 @@ export const Home = (props) => {
 
     const spotifyApi = new SpotifyWebApi();
     
-    const { user, auth, history } = props
+    const { user, auth, history, location } = props;
 
-    const [currentRoom, setCurrentRoom] = useState({});
+    const [room, setRoom] = useState({});
     const [profile, setProfile] = useState({});
     
     const handleSetProfile = (profile) => {
@@ -38,9 +38,15 @@ export const Home = (props) => {
         history.push('/log-out')
     }
 
-    const handleSetCurrentRoom = (room) => {
-        setCurrentRoom(room)
+    const handleSetRoom = (newRoom) => {
+        setRoom(newRoom)
     }
+
+    useEffect(() => {
+        if (location.state) {
+            setRoom(location.state.room)
+        }
+    }, [])
 
     return (
         <div>
@@ -51,16 +57,18 @@ export const Home = (props) => {
                 </>
             :
                 <>
+                    <p>{room.name}</p>
                     <LeftSidebar 
                         user={user}
                         history={history}
-                        currentRoom={currentRoom}
-                        setCurrentRoom={handleSetCurrentRoom}
+                        room={room}
+                        setRoom={handleSetRoom}
                         profile={profile}
                     />
                     <Room 
                         user={user}
-                        room={currentRoom}
+                        auth={auth}
+                        room={room}
                         profile={profile}
                         setProfile={handleSetProfile}
                     />
@@ -68,9 +76,9 @@ export const Home = (props) => {
                     <RightSidebar 
                         user={user}
                         auth={auth}
+                        room={room}
                         profile={profile}
                         history={history}
-                        currentRoom={currentRoom}
                     />
                     <button className='logout' onClick={handleLogOut}>
                         <img src={logout} alt='logout' />

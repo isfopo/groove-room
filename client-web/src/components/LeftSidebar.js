@@ -10,7 +10,7 @@ import '../styles/Sidebar.css';
 
 export const LeftSidebar = (props) => {
     
-    const { user, profile, currentRoom, setCurrentRoom, history } = props;
+    const { user, profile, room, setRoom, history } = props;
     const [ activeRooms, setActiveRooms ] = useState([]);
 
     useEffect(() => {
@@ -24,18 +24,17 @@ export const LeftSidebar = (props) => {
 
             <div className='room-display' >
                 {
-                    activeRooms.map( room => 
+                    activeRooms.map( thisRoom => 
                     <div 
-                        {...console.log(room)}
-                        // key={room.id} 
+                        key={thisRoom.id} 
                         className={`room-line-item`}
-                        onClick={() => setCurrentRoom(room)}
+                        onClick={() => setRoom(thisRoom)}
                     >
                         <RoomLineItem 
                             user={user}
-                            room={room} 
+                            room={thisRoom} 
                             profile={profile} 
-                            active={room === currentRoom} 
+                            active={thisRoom.id === room.id} 
                             history={history} 
                         />
                     </div>
@@ -45,11 +44,11 @@ export const LeftSidebar = (props) => {
             <div>
                 
             </div>
-            <button onClick={() => history.push({ pathname: "/join-room", state: { user }})} >
+            <button onClick={() => history.push({ pathname: "/join-room", state: { user, room }})} >
                 <img src={ join } alt="join" />
             </button>
             
-            <button onClick={() => history.push({ pathname: "/add-room", state: { user }})} >
+            <button onClick={() => history.push({ pathname: "/add-room", state: { user, room }})} >
                 <img src={ add } alt="add" />
             </button>
             <img className="handle handle-left" src={ list } alt="list" />

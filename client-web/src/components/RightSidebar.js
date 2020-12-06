@@ -9,15 +9,15 @@ import '../styles/Sidebar.css';
 
 export const RightSidebar = (props) => {
 
-    const { user, auth, profile, currentRoom, history } = props;
+    const { user, auth, profile, room, history } = props;
 
     const [playlist, setPlaylist] = useState([])
 
     useEffect(() => {
-        fetch(`http://localhost:3001/rooms/playlist/${currentRoom.id}`)
+        fetch(`http://localhost:3001/rooms/playlist/${room.id}`)
             .then(res => res.json())
             .then(res => setPlaylist(res))
-    }, [currentRoom])
+    }, [room])
 
     // TODO: show thumbnail of who added track
     // TODO: implement skip vote
@@ -35,7 +35,7 @@ export const RightSidebar = (props) => {
                     )
                 }
             </div>
-            <button onClick={() => history.push({ pathname: "/add-track", state: { user, room: currentRoom, auth, profile }})} >
+            <button onClick={() => history.push({ pathname: "/add-track", state: { user, room, auth, profile }})} >
                 <img src={ add } alt="add" />
             </button>
             <img src={ skip } alt="skip" />

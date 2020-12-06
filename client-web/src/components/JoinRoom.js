@@ -6,7 +6,7 @@ import paste from '../icons/content_paste-24px.svg';
 export const JoinRoom = (props) => {
 
     const { history, location } = props;
-    const { user } = location.state;
+    const { user, room } = location.state;
 
     const [roomId, setRoomId] = useState("");
     const [responseStatus, setResponseStatus] = useState(0)
@@ -35,7 +35,7 @@ export const JoinRoom = (props) => {
             setResponseStatus(res.status)
             if (res.status === 200) {
                 setTimeout(() => {
-                    history.push('/')
+                    history.push({ pathname: '/', state: { user, room }})
                 }, 3000);
             }     
         })
@@ -62,7 +62,7 @@ export const JoinRoom = (props) => {
                     </form>
                 </>
             }
-            <button onClick={() => history.push({ pathname: '/', state: { user }})}>
+            <button onClick={() => history.push({ pathname: '/', state: { user, room }})}>
                 <img src={back} alt="back"/>
             </button>
         </div>

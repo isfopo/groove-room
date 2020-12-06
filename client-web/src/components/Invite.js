@@ -21,7 +21,7 @@ export const Invite = (props) => {
         e.target.focus();
         setCopied(true);
         setTimeout(() => {
-            history.push({ pathname: '/', state: { user }});
+            history.push({ pathname: '/', state: { user, room }});
         }, 3000)
     };
 
@@ -57,7 +57,7 @@ export const Invite = (props) => {
                 />
             </form>
 
-            <button onClick={() => history.push({ pathname: '/', state: { user }})}>
+            <button onClick={() => history.push({ pathname: '/', state: { user, room }})}>
                 <img src={back} alt="back"/>
             </button>
         </div>

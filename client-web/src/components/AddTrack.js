@@ -150,7 +150,7 @@ export const AddTrack = (props) => {
 
                 </>
             }
-            <button onClick={() => history.push({ pathname: '/', state: { user }})}>
+            <button onClick={() => history.push({ pathname: '/', state: { user, room }})}>
                 <img src={back} alt="back"/>
             </button>
         </div>

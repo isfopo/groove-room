@@ -12,7 +12,7 @@ export const AddRoom = (props) => {
     const { user } = location.state;
     
     const [roomName, setRoomName] = useState("");
-    const [roomId, setRoomId] = useState('');
+    const [room, setRoom] = useState({});
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [copied, setCopied] = useState(false);
 
@@ -24,7 +24,7 @@ export const AddRoom = (props) => {
         e.target.focus();
         setCopied(true);
         setTimeout(() => {
-            history.push('/');
+            history.push({ pathname: '/', state: { user, room }});
         }, 3000)
     };
     
@@ -43,7 +43,7 @@ export const AddRoom = (props) => {
             })
         })
             .then(res => res.json())
-            .then(res => setRoomId(res.id))
+            .then(res => setRoom(res))
     }
 
     return (
@@ -75,7 +75,7 @@ export const AddRoom = (props) => {
                         href={`mailto:?${
                         queryString.stringify({
                             subject: "Groove Room Id",
-                            body: `You are invited to join ${roomName}! Copy "${roomId}" in "Join Room"`
+                            body: `You are invited to join ${room.name}! Copy "${room.id}" in "Join Room"`
                         })
                     }`}>
                         <img src={share} alt="share" />
@@ -84,12 +84,12 @@ export const AddRoom = (props) => {
                         <textarea
                         readOnly
                         ref={textAreaRef}
-                        value={roomId}
+                        value={room.id}
                         />
                     </form>
                 </div>
             }
-            <button onClick={() => history.push({ pathname: '/', state: { user }})}>
+            <button onClick={() => history.push({ pathname: '/', state: { user, room }})}>
                 <img src={back} alt="back"/>
             </button>
         </div>
