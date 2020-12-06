@@ -7,10 +7,14 @@ import contract from '../icons/expand_less-24px.svg';
 import '../styles/Room.css';
 import { Message } from './Message';
 
+const SpotifyWebApi = require('spotify-web-api-js');
+
 export const Room = (props) => {
 
     // TODO: start playing room's current song on spotify
         // fetch current song uri and position_ms from db
+
+    const spotifyApi = new SpotifyWebApi();
 
     const { user, auth, room, profile, setProfile } = props
 
@@ -45,8 +49,20 @@ export const Room = (props) => {
         setExpanded(false);
     }
 
+    const play = () => {
+
+        spotifyApi.setAccessToken(auth.access_token);
+        // FIXME: spotify has to be playing for this to work - is there a way to start/open spotify from here?
+        spotifyApi.play({
+            "uris": JSON.parse(room.playlist).map( track => track.uri ),
+            "position_ms": 0
+        })
+    }
+
     return (
         <div className="room">
+
+                <button onClick={play}>Play</button>
 
                 { expanded ? 
                     <div className="expanded-view">
