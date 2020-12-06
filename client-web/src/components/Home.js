@@ -59,7 +59,8 @@ export const Home = (props) => {
                         profile={profile}
                     />
                     <Room 
-                        currentRoom={currentRoom}
+                        user={user}
+                        room={currentRoom}
                         profile={profile}
                         setProfile={handleSetProfile}
                     />

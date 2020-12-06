@@ -61,7 +61,6 @@ export const Profile = (props) => {
                                     setNewMessage(e.target.value)
                                     setReadyToType(false) } 
                                 }
-
                             }
                         />
                     </form>
