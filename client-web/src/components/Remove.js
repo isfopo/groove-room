@@ -5,7 +5,9 @@ import back from '../icons/arrow_back_ios-24px.svg';
 
 export const Remove = (props) => {
 
-    const [room] = useState(queryString.parse(props.match.params.room))
+    const { location, history } = props;
+    const { user, room } = location.state;
+
     const [confirmed, setConfirmed] = useState(false);
 
     const deleteRoom = () => {
@@ -23,7 +25,7 @@ export const Remove = (props) => {
             .then(res => {
                 setConfirmed(true)
                 setTimeout(() => {
-                    props.history.push('/');
+                    history.push({ pathname: '/', state: { user }})
                 }, 3000)
             })
     }
@@ -39,9 +41,9 @@ export const Remove = (props) => {
             :
                 <p>Removed!</p>
             }
-            <a href="/">
+            <button onClick={() => history.push({ pathname: '/', state: { user }})}>
                 <img src={back} alt="back"/>
-            </a>
+            </button>
         </div>
     )
 }

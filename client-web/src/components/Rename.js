@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import queryString from 'query-string';
 
 import back from '../icons/arrow_back_ios-24px.svg';
 
 export const Rename = (props) => {
 
-    const [room] = useState(queryString.parse(props.match.params.room));
+    const { history, location } = props;
+    const { user, room } = location.state;
+
     const [newName, setNewName] = useState('');
     const [confirmed, setConfirmed] = useState(false);
 
@@ -25,7 +26,7 @@ export const Rename = (props) => {
             .then(res => {
                 setConfirmed(true)
                 setTimeout(() => {
-                    props.history.push('/');
+                    history.push({ pathname: '/', state: { user }});
                 }, 3000)
             })
         
@@ -50,9 +51,9 @@ export const Rename = (props) => {
                 <p>Renamed!</p>
             }
 
-            <a href="/">
+            <button onClick={() => history.push({ pathname: '/', state: { user }})}>
                 <img src={back} alt="back"/>
-            </a>
+            </button>
         </div>
     )
 }

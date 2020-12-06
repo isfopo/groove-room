@@ -62,9 +62,9 @@ export const JoinRoom = (props) => {
                     </form>
                 </>
             }
-            <a href="/">
+            <button onClick={() => history.push({ pathname: '/', state: { user }})}>
                 <img src={back} alt="back"/>
-            </a>
+            </button>
         </div>
     )
 }

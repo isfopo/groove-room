@@ -13,7 +13,6 @@ export const AddTrack = (props) => {
 
     const spotifyApi = new SpotifyWebApi();
 
-    console.log(props)
     const { history, location } = props;
     const { user, room, auth, profile } = location.state;
 
@@ -151,9 +150,9 @@ export const AddTrack = (props) => {
 
                 </>
             }
-            <a href="/">
-                <img className="back" src={back} alt="back"/>
-            </a>
+            <button onClick={() => history.push({ pathname: '/', state: { user }})}>
+                <img src={back} alt="back"/>
+            </button>
         </div>
     )
 }

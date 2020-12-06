@@ -5,7 +5,9 @@ import back from '../icons/arrow_back_ios-24px.svg';
 
 export const Leave = (props) => {
 
-    const [room] = useState(queryString.parse(props.match.params.room));
+    const { history, location } = props;
+    const { user, room, profile } = location.state;
+
     const [confirmed, setConfirmed] = useState(false);
 
     const leaveRoom = () => {
@@ -15,8 +17,8 @@ export const Leave = (props) => {
             },
             method: "DELETE",
             body: JSON.stringify({
-                profile_id: room.profile_id,
-                room_id: room.room_id
+                profile_id: profile.id,
+                room_id: room.id
             })
         })
             .then(res => res.json())
@@ -24,7 +26,7 @@ export const Leave = (props) => {
                 console.log(res)
                 setConfirmed(true)
                 setTimeout(() => {
-                    props.history.push('/');
+                    history.push({ pathname: '/', state: { user }});
                 }, 3000)
             })
     } 
@@ -33,15 +35,15 @@ export const Leave = (props) => {
         <div className="leave">
             { !confirmed ?
                 <>
-                    <p>Are you sure you want to leave "{room.room_name}"?</p>
+                    <p>Are you sure you want to leave "{room.name}"?</p>
                     <button onClick={leaveRoom}>Yes</button>
                 </>
             :
                 <p>Left room!</p>
             }
-            <a href="/">
+            <button onClick={() => history.push({ pathname: '/', state: { user }})}>
                 <img src={back} alt="back"/>
-            </a>
+            </button>
         </div>
     )
 }

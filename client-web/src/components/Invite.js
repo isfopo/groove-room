@@ -8,7 +8,9 @@ import share from '../icons/share-24px.svg';
 
 export const Invite = (props) => {
 
-    const [room] = useState(queryString.parse(props.match.params.room));
+    const { history, location } = props;
+    const { user, room } = location.state;
+
     const [copied, setCopied] = useState(false);
 
     const textAreaRef = useRef(null);
@@ -19,7 +21,7 @@ export const Invite = (props) => {
         e.target.focus();
         setCopied(true);
         setTimeout(() => {
-            props.history.push('/');
+            history.push({ pathname: '/', state: { user }});
         }, 3000)
     };
 
@@ -36,25 +38,28 @@ export const Invite = (props) => {
                         </button> 
                     </div>
             }
-                <a target="_blank" rel="noreferrer"
-                    href={`mailto:?${
-                    queryString.stringify({
-                        subject: "Groove Room Id",
-                        body: `You are invited to join ${room.name}! Copy "${room.id}" in "Join Room"`
-                    })
-                }`}>
-                    <img src={share} alt="share" />
-                </a>
-                <form >
-                    <textarea
-                    readOnly
-                    ref={textAreaRef}
-                    value={room.id}
-                    />
-                </form>
-            <a href="/">
-                <img src={back} alt="back"/>
+
+            <a target="_blank" rel="noreferrer"
+                href={`mailto:?${
+                queryString.stringify({
+                    subject: `Welcome to ${room.name}!`,
+                    body: `You are invited to join ${room.name}! Copy "${room.id}" in "Join Room"`
+                })
+            }`}>
+                <img src={share} alt="share" />
             </a>
+            
+            <form >
+                <textarea
+                readOnly
+                ref={textAreaRef}
+                value={room.id}
+                />
+            </form>
+
+            <button onClick={() => history.push({ pathname: '/', state: { user }})}>
+                <img src={back} alt="back"/>
+            </button>
         </div>
     )
 }

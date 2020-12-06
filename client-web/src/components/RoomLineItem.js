@@ -5,7 +5,7 @@ import more from '../icons/more_vert-24px.svg'
 
 export const RoomLineItem = (props) => {
 
-    const { room, profile, active } = props;
+    const { user, room, profile, active, history } = props;
     
     const [showMenu, setShowMenu] = useState(false);
 
@@ -18,27 +18,24 @@ export const RoomLineItem = (props) => {
 
             { showMenu &&
                 <div className='room-menu' >
-                    <a href={`/invite/${queryString.stringify({
-                        id: room.id,
-                        name: room.name
-                    })}`}>Invite</a><br />
+                    <button onClick={() => history.push({ pathname: '/invite', state: { user, room }})}>
+                        Invite
+                    </button>
+                    <br />
 
-                    <a href={`/rename/${queryString.stringify({
-                        id: room.id,
-                        name: room.name
-                    })}`}>Rename</a><br />
+                    <button onClick={() => history.push({ pathname: '/rename', state: { user, room }})}>
+                        Rename
+                    </button>
+                    <br />
 
-                    <a href={`/leave/${queryString.stringify({
-                        room_id: room.id,
-                        room_name: room.name,
-                        profile_id: profile.id
-                    })}`}>Leave</a><br />
+                    <button onClick={() => history.push({ pathname: '/leave', state: { user, room, profile }})}>
+                        Leave
+                    </button>
+                    <br />
 
-                    <a href={`/remove/${queryString.stringify({
-                        room_id: room.id,
-                        room_name: room.name,
-                        profile_id: profile.id
-                    })}`}>Remove</a>
+                    <button onClick={() => history.push({ pathname: '/remove', state: { user, room }})}>
+                        Remove
+                    </button>
                 </div>
             }
         </div>

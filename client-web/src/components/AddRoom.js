@@ -89,9 +89,9 @@ export const AddRoom = (props) => {
                     </form>
                 </div>
             }
-            <a href="/">
+            <button onClick={() => history.push({ pathname: '/', state: { user }})}>
                 <img src={back} alt="back"/>
-            </a>
+            </button>
         </div>
     )
 }

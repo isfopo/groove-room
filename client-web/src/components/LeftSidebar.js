@@ -11,7 +11,7 @@ import '../styles/Sidebar.css';
 export const LeftSidebar = (props) => {
     
     const { user, profile, currentRoom, setCurrentRoom, history } = props;
-    const [activeRooms, setActiveRooms] = useState([]);
+    const [ activeRooms, setActiveRooms ] = useState([]);
 
     useEffect(() => {
         fetch(`http://localhost:3001/rooms/user/${user.id}`)
@@ -26,11 +26,18 @@ export const LeftSidebar = (props) => {
                 {
                     activeRooms.map( room => 
                     <div 
-                        key={room.id} 
+                        {...console.log(room)}
+                        // key={room.id} 
                         className={`room-line-item`}
                         onClick={() => setCurrentRoom(room)}
                     >
-                        <RoomLineItem room={room} profile={profile} active={room === currentRoom} />
+                        <RoomLineItem 
+                            user={user}
+                            room={room} 
+                            profile={profile} 
+                            active={room === currentRoom} 
+                            history={history} 
+                        />
                     </div>
                     )
                 }
