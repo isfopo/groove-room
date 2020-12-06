@@ -41,6 +41,8 @@ export const JoinRoom = (props) => {
         })
     }
 
+    // TODO: when user attempts to join room that they are already in, return to home with that room selected
+
     return (
         <div className="join-room">
             { responseStatus === 200 ?
