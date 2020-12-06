@@ -9,7 +9,7 @@ const Message = require('../db/models').Message;
 
 // GET last message from a Profile
 router.get('/last/:id', asyncHandler( async (req, res) => {
-
+    
     const allMessages = await Message.findAll({
         where: {
             profile_id: req.params.id
