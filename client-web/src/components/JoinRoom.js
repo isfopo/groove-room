@@ -1,16 +1,15 @@
 import React, { useState, useRef } from 'react'
 
-import { useCookies } from 'react-cookie';
-
 import back from '../icons/arrow_back_ios-24px.svg';
 import paste from '../icons/content_paste-24px.svg';
 
 export const JoinRoom = (props) => {
 
+    const { history, location } = props;
+    const { user } = location.state;
+
     const [roomId, setRoomId] = useState("");
     const [responseStatus, setResponseStatus] = useState(0)
-
-    const [cookies] = useCookies();
 
     const textAreaRef = useRef(null);
 
@@ -29,12 +28,17 @@ export const JoinRoom = (props) => {
             method: "POST",
             body: JSON.stringify({
                 room_id: roomId,
-                user_id: cookies.user.id,
-                user_image: cookies.user.image
+                user_id: user.id,
+                user_image: user.image
             })
-        }).then(res => setResponseStatus(res.status))
-
-        //props.history.push('/')
+        }).then(res => {
+            setResponseStatus(res.status)
+            if (res.status === 200) {
+                setTimeout(() => {
+                    history.push('/')
+                }, 3000);
+            }     
+        })
     }
 
     return (
