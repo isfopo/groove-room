@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import { Login } from './Login.js';
 import { Room } from './Room.js';
@@ -11,11 +11,8 @@ import '../styles/Home.css';
 
 import logout from '../icons/logout.svg'
 
-const SpotifyWebApi = require('spotify-web-api-js');
-
 export const Home = (props) => {
 
-    const spotifyApi = new SpotifyWebApi();
     
     const { user, auth, history, location } = props;
 
@@ -28,14 +25,6 @@ export const Home = (props) => {
 
     const handleSetProfile = (profile) => {
         setProfile(profile);
-    }
-        
-    const play = () => {
-        spotifyApi.setAccessToken(auth.access_token);
-        spotifyApi.play({
-            "uris": ["spotify:track:4iV5W9uYEdYUVa79Axb7Rh"],
-            "position_ms": 80000
-        })
     }
 
     const handleLogOut = () => { // TODO: handle logout
@@ -51,7 +40,6 @@ export const Home = (props) => {
                 </>
             :
                 <>
-                    <p>{room.name}</p>
                     <LeftSidebar 
                         user={user}
                         history={history}
@@ -66,7 +54,6 @@ export const Home = (props) => {
                         profile={profile}
                         setProfile={handleSetProfile}
                     />
-                    <button onClick={play}>Play</button>
                     <RightSidebar 
                         user={user}
                         auth={auth}
