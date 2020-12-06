@@ -12,7 +12,7 @@ export const Room = (props) => {
     // TODO: start playing room's current song on spotify
         // fetch current song uri and position_ms from db
 
-    const { user, room, profile, setProfile } = props
+    const { user, auth, room, profile, setProfile } = props
 
     const [expanded, setExpanded] = useState(false);
     const [profiles, setProfiles] = useState([]);
