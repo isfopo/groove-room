@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
-import { CookiesProvider } from 'react-cookie';
 
 import { Home } from './Home.js'
 import { RedirectPage } from './RedirectPage.js';

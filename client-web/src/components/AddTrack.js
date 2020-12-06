@@ -1,7 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { useCookies } from 'react-cookie';
-
-import queryString from 'query-string';
 
 import { scale } from '../utils/scale.js';
 import { isEmpty } from '../utils/isEmpty.js';
@@ -28,8 +25,6 @@ export const AddTrack = (props) => {
     const [results, setResults] = useState([]);
 
     const [choice, setChoice] = useState({})
-
-    const [cookies] = useCookies();
     
     const getRecentAndRecommended = async () => {
         let recent = []

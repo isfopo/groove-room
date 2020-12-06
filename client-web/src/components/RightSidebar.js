@@ -18,7 +18,10 @@ export const RightSidebar = (props) => {
             .then(res => res.json())
             .then(res => setPlaylist(res))
     }, [currentRoom])
+
     // TODO: show thumbnail of who added track
+    // TODO: implement skip vote
+    
     return (
         <div className="sidebar right">
             <img className="handle handle-right" src={ playlistIcon } alt="playlist" />
