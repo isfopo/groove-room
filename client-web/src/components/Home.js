@@ -19,9 +19,13 @@ export const Home = (props) => {
     
     const { user, auth, history, location } = props;
 
-    const [room, setRoom] = useState({});
+    const [room, setRoom] = useState(() => location.state ? location.state.room : {});
     const [profile, setProfile] = useState({});
     
+    const handleSetRoom = (newRoom) => {
+        setRoom(newRoom)
+    }
+
     const handleSetProfile = (profile) => {
         setProfile(profile);
     }
@@ -37,16 +41,6 @@ export const Home = (props) => {
     const handleLogOut = () => { // TODO: handle logout
         history.push('/log-out')
     }
-
-    const handleSetRoom = (newRoom) => {
-        setRoom(newRoom)
-    }
-
-    useEffect(() => {
-        if (location.state) {
-            setRoom(location.state.room)
-        }
-    }, [])
 
     return (
         <div>

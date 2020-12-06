@@ -40,7 +40,7 @@ export const App = () => {
             .then(res => setUser(res[0]))
         })
   }
-
+  
   return (
     <div className="main">
       <BrowserRouter>
@@ -54,13 +54,13 @@ export const App = () => {
 
         <Route path="/log-out"         render={ (props) => <LogOut       {...props} user={user} auth={spotifyAuth} /> } />
 
-        <Route path="/invite/:room"    render={ (props) => <Invite       {...props} user={user} auth={spotifyAuth} /> } />
+        <Route path="/invite"          render={ (props) => <Invite       {...props} user={user} auth={spotifyAuth} /> } />
 
-        <Route path="/rename/:room"    render={ (props) => <Rename       {...props} user={user} auth={spotifyAuth} /> } />
+        <Route path="/rename"          render={ (props) => <Rename       {...props} user={user} auth={spotifyAuth} /> } />
 
-        <Route path="/leave/:room"     render={ (props) => <Leave        {...props} user={user} auth={spotifyAuth} /> } />
+        <Route path="/leave"           render={ (props) => <Leave        {...props} user={user} auth={spotifyAuth} /> } />
 
-        <Route path="/remove/:room"    render={ (props) => <Remove       {...props} user={user} auth={spotifyAuth} /> } />
+        <Route path="/remove"          render={ (props) => <Remove       {...props} user={user} auth={spotifyAuth} /> } />
 
         <Route exact path="/"          render={ (props) => <Home         {...props} user={user} auth={spotifyAuth} /> } />
 

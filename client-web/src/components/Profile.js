@@ -30,7 +30,7 @@ export const Profile = (props) => {
             },
             method: "POST",
             body: JSON.stringify({
-                profile_id: props.profile.id,
+                profile_id: profile.id,
                 content: newMessage
             })
         })
