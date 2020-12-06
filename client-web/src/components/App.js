@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 import { CookiesProvider } from 'react-cookie';
 
@@ -15,23 +15,57 @@ import { Rename } from './Rename.js';
 import { Leave } from './Leave.js';
 import { Remove } from './Remove.js';
 
+const SpotifyWebApi = require('spotify-web-api-js');
+
 export const App = () => {
+
+  const spotifyApi = new SpotifyWebApi();
+
+  const [spotifyAuth, setSpotifyAuth] = useState({})
+  const [user, setUser] = useState({})
+
+  const handleSetSpotifyAuth = (auth) => {
+    setSpotifyAuth(auth);
+
+    spotifyApi.setAccessToken(auth.access_token);
+    spotifyApi.getMe()
+        .then( async (data) => {
+            fetch('http://localhost:3001/users', {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                method: "POST",
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(res => setUser(res[0]))
+        })
+  }
+
   return (
     <div className="main">
-      <CookiesProvider>
-        <BrowserRouter>
-          <Route path="/redirect" component={ RedirectPage } />
-          <Route path="/add-room" component={ AddRoom } />
-          <Route path="/join-room" component={ JoinRoom } />
-          <Route path="/add-track/:room" component={ AddTrack } />
-          <Route path="/log-out" component={ LogOut } />
-          <Route path="/invite/:room" component={ Invite } />
-          <Route path="/rename/:room" component={ Rename } />
-          <Route path="/leave/:room" component={ Leave } />
-          <Route path="/remove/:room" component={ Remove } />
-          <Route exact path="/" component={ Home } />
-        </BrowserRouter>
-      </CookiesProvider>
+      <BrowserRouter>
+        <Route path="/redirect"        render={ (props) => <RedirectPage {...props} setSpotifyAuth={handleSetSpotifyAuth} /> } />
+
+        <Route path="/add-room"        render={ (props) => <AddRoom      {...props} user={user} auth={spotifyAuth} /> } />
+
+        <Route path="/join-room"       render={ (props) => <JoinRoom     {...props} user={user} auth={spotifyAuth} /> } />
+
+        <Route path="/add-track"       render={ (props) => <AddTrack     {...props} user={user} auth={spotifyAuth} /> } />
+
+        <Route path="/log-out"         render={ (props) => <LogOut       {...props} user={user} auth={spotifyAuth} /> } />
+
+        <Route path="/invite/:room"    render={ (props) => <Invite       {...props} user={user} auth={spotifyAuth} /> } />
+
+        <Route path="/rename/:room"    render={ (props) => <Rename       {...props} user={user} auth={spotifyAuth} /> } />
+
+        <Route path="/leave/:room"     render={ (props) => <Leave        {...props} user={user} auth={spotifyAuth} /> } />
+
+        <Route path="/remove/:room"    render={ (props) => <Remove       {...props} user={user} auth={spotifyAuth} /> } />
+
+        <Route exact path="/"          render={ (props) => <Home         {...props} user={user} auth={spotifyAuth} /> } />
+
+      </BrowserRouter>
     </div>
   );
 }

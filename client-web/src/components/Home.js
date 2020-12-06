@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react'
-import { useCookies } from 'react-cookie';
+import React, { useState } from 'react';
 
 import { Login } from './Login.js';
 import { Room } from './Room.js';
 import { LeftSidebar } from './LeftSidebar.js';
 import { RightSidebar } from './RightSidebar.js';
+
+import { isEmpty } from '../utils/isEmpty.js';
 
 import '../styles/Home.css';
 
@@ -15,47 +16,26 @@ const SpotifyWebApi = require('spotify-web-api-js');
 export const Home = (props) => {
 
     const spotifyApi = new SpotifyWebApi();
-    const [cookies, setCookie, removeCookie] = useCookies();
+    
+    const { user, auth, history } = props
 
-    const [token, setToken] = useState(cookies.spotify_auth && cookies.spotify_auth.access_token); // TODO: get refresh token when needed
     const [currentRoom, setCurrentRoom] = useState({});
     const [profile, setProfile] = useState({});
     
     const handleSetProfile = (profile) => {
-        setProfile(profile)
+        setProfile(profile);
     }
-
-    useEffect(() => {
-        spotifyApi.setAccessToken(token);
-        spotifyApi.getMe()
-            .then( async (data) => {
-                fetch('http://localhost:3001/users', {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    method: "POST",
-                    body: JSON.stringify(data)
-                })
-                .then(res => res.json())
-                .then(res => setCookie("user", res[0]))
-            })
-
-        }, [token])
         
     const play = () => {
+        spotifyApi.setAccessToken(auth.access_token);
         spotifyApi.play({
-            
             "uris": ["spotify:track:4iV5W9uYEdYUVa79Axb7Rh"],
             "position_ms": 80000
         })
-
     }
 
-    const handleLogOut = () => {
-        removeCookie("user", {path: '/'});
-        removeCookie("spotify_auth", {path: '/'});
-        removeCookie("spotify_auth_state", {path: '/'});
-        props.history.push('/log-out')
+    const handleLogOut = () => { // TODO: handle logout
+        history.push('/log-out')
     }
 
     const handleSetCurrentRoom = (room) => {
@@ -64,7 +44,7 @@ export const Home = (props) => {
 
     return (
         <div>
-            { !cookies.user ?
+            { isEmpty(user) ?
                 <>
                     <h1>Groove Room</h1>
                     <Login /> 
@@ -72,6 +52,8 @@ export const Home = (props) => {
             :
                 <>
                     <LeftSidebar 
+                        user={user}
+                        history={history}
                         currentRoom={currentRoom}
                         setCurrentRoom={handleSetCurrentRoom}
                         profile={profile}
@@ -83,6 +65,10 @@ export const Home = (props) => {
                     />
                     <button onClick={play}>Play</button>
                     <RightSidebar 
+                        user={user}
+                        auth={auth}
+                        profile={profile}
+                        history={history}
                         currentRoom={currentRoom}
                     />
                     <button className='logout' onClick={handleLogOut}>

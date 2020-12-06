@@ -11,15 +11,14 @@ import '../styles/Sidebar.css';
 
 export const LeftSidebar = (props) => {
     
+    const { user, profile, currentRoom, setCurrentRoom, history } = props;
     const [activeRooms, setActiveRooms] = useState([]);
 
-    const [cookies] = useCookies();
-
     useEffect(() => {
-        fetch(`http://localhost:3001/rooms/user/${cookies.user.id}`)
+        fetch(`http://localhost:3001/rooms/user/${user.id}`)
             .then(res => res.json())
             .then(res => setActiveRooms(res))
-    }, [cookies.user.id])
+    }, [user.id])
 
     return (
         <div className="sidebar left">
@@ -30,19 +29,23 @@ export const LeftSidebar = (props) => {
                     <div 
                         key={room.id} 
                         className={`room-line-item`}
-                        onClick={() => props.setCurrentRoom(room)}
+                        onClick={() => setCurrentRoom(room)}
                     >
-                        <RoomLineItem room={room} profile={props.profile} active={room === props.currentRoom}/>
+                        <RoomLineItem room={room} profile={profile} active={room === currentRoom} />
                     </div>
                     )
                 }
             </div>
-            <a href="/join-room">
+            <div>
+                
+            </div>
+            <button onClick={() => history.push({ pathname: "/join-room", state: { user }})} >
                 <img src={ join } alt="join" />
-            </a>
-            <a href="/add-room">
+            </button>
+            
+            <button onClick={() => history.push({ pathname: "/add-room", state: { user }})} >
                 <img src={ add } alt="add" />
-            </a>
+            </button>
             <img className="handle handle-left" src={ list } alt="list" />
         </div>
     )

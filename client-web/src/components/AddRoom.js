@@ -1,5 +1,4 @@
 import React, { useState, useRef } from "react";
-import { useCookies } from 'react-cookie';
 import queryString from 'query-string';
 
 import back from '../icons/arrow_back_ios-24px.svg';
@@ -8,13 +7,14 @@ import done from '../icons/done-24px.svg';
 import share from '../icons/share-24px.svg';
 
 export const AddRoom = (props) => {
+
+    const { history, location } = props;
+    const { user } = location.state;
     
     const [roomName, setRoomName] = useState("");
     const [roomId, setRoomId] = useState('');
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [copied, setCopied] = useState(false);
-
-    const [cookies] = useCookies();
 
     const textAreaRef = useRef(null);
   
@@ -24,7 +24,7 @@ export const AddRoom = (props) => {
         e.target.focus();
         setCopied(true);
         setTimeout(() => {
-            props.history.push('/');
+            history.push('/');
         }, 3000)
     };
     
@@ -38,8 +38,8 @@ export const AddRoom = (props) => {
             method: "POST",
             body: JSON.stringify({
                 room_name: roomName,
-                id: cookies.user.id,
-                image: cookies.user.image
+                id: user.id,
+                image: user.image
             })
         })
             .then(res => res.json())

@@ -5,7 +5,7 @@ import back from '../icons/arrow_back_ios-24px.svg';
 
 export const Leave = (props) => {
 
-    const [data] = useState(queryString.parse(props.match.params.room));
+    const [room] = useState(queryString.parse(props.match.params.room));
     const [confirmed, setConfirmed] = useState(false);
 
     const leaveRoom = () => {
@@ -15,8 +15,8 @@ export const Leave = (props) => {
             },
             method: "DELETE",
             body: JSON.stringify({
-                profile_id: data.profile_id,
-                room_id: data.room_id
+                profile_id: room.profile_id,
+                room_id: room.room_id
             })
         })
             .then(res => res.json())
@@ -33,7 +33,7 @@ export const Leave = (props) => {
         <div className="leave">
             { !confirmed ?
                 <>
-                    <p>Are you sure you want to leave "{data.room_name}"?</p>
+                    <p>Are you sure you want to leave "{room.room_name}"?</p>
                     <button onClick={leaveRoom}>Yes</button>
                 </>
             :

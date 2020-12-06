@@ -16,7 +16,9 @@ export const AddTrack = (props) => {
 
     const spotifyApi = new SpotifyWebApi();
 
-    const [room] = useState(queryString.parse(props.match.params.room));
+    console.log(props)
+    const { history, location } = props;
+    const { user, room, auth, profile } = location.state;
 
     const [recentlyPlayed, setRecentlyPlayed] = useState([])
     const [recommendations, setRecommendations] = useState([])
@@ -31,7 +33,7 @@ export const AddTrack = (props) => {
     
     const getRecentAndRecommended = async () => {
         let recent = []
-        spotifyApi.setAccessToken(cookies.spotify_auth.access_token);
+        spotifyApi.setAccessToken(auth.access_token);
         await spotifyApi.getMyRecentlyPlayedTracks({ limit: 5 })
                 .then(res => {
                     recent = res.items.map( track => track.track.id)
@@ -85,7 +87,7 @@ export const AddTrack = (props) => {
     
     useEffect(() => {
         setOffset(0);
-        spotifyApi.setAccessToken(cookies.spotify_auth.access_token);
+        spotifyApi.setAccessToken(auth.access_token);
         if (query) {
             spotifyApi.search(query, ['track'], { limit: 50 })
             .then(res => setResults(res.tracks.items))

@@ -35,6 +35,8 @@ export const Rename = (props) => {
         <div className='rename'>
 
             { !confirmed ?
+                <>
+                <p>Rename {room.name}?</p>
                 <form readOnly onSubmit={handleSubmit}>
                     <input 
                         type="text"
@@ -43,6 +45,7 @@ export const Rename = (props) => {
                         onChange={e => setNewName(e.target.value)} />
                     <input type="submit" value="Submit" />
                 </form>
+                </>
             :
                 <p>Renamed!</p>
             }

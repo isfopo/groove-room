@@ -9,7 +9,7 @@ import '../styles/Sidebar.css';
 
 export const RightSidebar = (props) => {
 
-    const { currentRoom } = props;
+    const { user, auth, profile, currentRoom, history } = props;
 
     const [playlist, setPlaylist] = useState([])
 
@@ -18,7 +18,7 @@ export const RightSidebar = (props) => {
             .then(res => res.json())
             .then(res => setPlaylist(res))
     }, [currentRoom])
-
+    // TODO: show thumbnail of who added track
     return (
         <div className="sidebar right">
             <img className="handle handle-right" src={ playlistIcon } alt="playlist" />
@@ -32,12 +32,9 @@ export const RightSidebar = (props) => {
                     )
                 }
             </div>
-            <a href={`/add-track/${queryString.stringify({
-                id: currentRoom.id,
-                name: currentRoom.name
-            })}`}>
+            <button onClick={() => history.push({ pathname: "/add-track", state: { user, room: currentRoom, auth, profile }})} >
                 <img src={ add } alt="add" />
-            </a>
+            </button>
             <img src={ skip } alt="skip" />
         </div>
     )

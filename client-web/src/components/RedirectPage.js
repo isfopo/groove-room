@@ -3,22 +3,19 @@ import { useCookies } from 'react-cookie';
 import { getParamValues } from '../utils/getParamValues.js';
 
 export const RedirectPage = (props) => {
-
-    const [cookies, setCookie] = useCookies();
-    
     
     useEffect(() => {
-        const { history, location } = props;
+        const { history, location, setSpotifyAuth } = props;
         const authorizationData = getParamValues(location.hash);
 
         // get time of expiration from 
         authorizationData.expires_at = new Date().getTime() + parseInt(authorizationData.expires_in);
 
         // puts auth data in a cookie
-        setCookie('spotify_auth', JSON.stringify(authorizationData));
+        setSpotifyAuth( authorizationData );
 
         // redirect to home page
-        history.push('/');
+        history.push(`/`);
     }, [])
 
     return (
