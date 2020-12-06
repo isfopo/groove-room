@@ -164,7 +164,6 @@ router.put('/add-track', asyncHandler( async (req, res) => {
 router.delete('/delete', asyncHandler( async (req, res) => {
     const roomToDelete = await Room.findByPk(req.body.room_id);
     
-    // TODO: delete profiles in the room
     const profilesToDelete = await Profile.findAll({
         where: {
             room_id: roomToDelete.id
