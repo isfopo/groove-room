@@ -6,6 +6,7 @@ import contract from '../icons/expand_less-24px.svg';
 
 import '../styles/Room.css';
 import { Message } from './Message';
+import { isEmpty } from '../utils/isEmpty';
 
 const SpotifyWebApi = require('spotify-web-api-js');
 
@@ -49,21 +50,67 @@ export const Room = (props) => {
         setExpanded(false);
     }
 
-    const play = () => {
+    const sync = async () => {
+        await spotifyApi.setAccessToken(auth.access_token);
 
-        spotifyApi.setAccessToken(auth.access_token);
-        // FIXME: spotify has to be playing for this to work - is there a way to start/open spotify from here?
-        spotifyApi.play({
-            "uris": JSON.parse(room.playlist).map( track => track.uri ),
-            "position_ms": 0
+        const player = await spotifyApi.getMyCurrentPlaybackState();
+
+        fetch('http://localhost:3001/rooms/sync', {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: "PUT",
+            body: JSON.stringify({
+                room_id: room.id,
+                current_uri: player.item.uri,
+                position_ms: player.progress_ms
+            })
         })
+
     }
+
+    const play = async () => {
+        await spotifyApi.setAccessToken(auth.access_token);
+        // FIXME: spotify has to be playing for this to work - is there a way to start/open spotify from here?
+            // spotify is looking for active devices - if there are none then there is a 404 code returned
+                // active devices can be called for
+                // maybe if we get a 404 error then prompt user to open spotify? 
+
+        fetch(`http://localhost:3001/rooms/sync/${room.id}`)
+            .then(res => res.json())
+            .then(res => {
+                if ( res.status === 200 ) {
+                    spotifyApi.play({
+                        "uris": JSON.parse(room.playlist).map( track => track.uri ),
+                        "offset": {
+                            "uri": res.current_uri
+                        },
+                        "position_ms": res.position_ms
+                    });
+                } else if ( res.status === 404) {
+                    spotifyApi.play({
+                        "uris": JSON.parse(room.playlist).map( track => track.uri )
+                    });
+                }
+            })
+    }
+
+    const pause = async () => {
+        await spotifyApi.setAccessToken(auth.access_token);
+        spotifyApi.pause()
+    }
+    
+    useEffect( () => {
+        if ( !isEmpty(room) && room.playlist ) {
+            play();
+        } else {
+            pause();
+        }
+    }, [room])
 
     return (
         <div className="room">
-
-                <button onClick={play}>Play</button>
-
+            <button onClick={() => sync()} >sync</button>
                 { expanded ? 
                     <div className="expanded-view">
                         <img className="arrows contract" src={contract} alt="contract" onMouseEnter={less} />
