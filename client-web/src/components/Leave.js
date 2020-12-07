@@ -23,7 +23,6 @@ export const Leave = (props) => {
         })
             .then(res => res.json())
             .then(res => {
-                console.log(res)
                 setConfirmed(true)
                 setTimeout(() => {
                     history.push({ pathname: '/', state: { user, room }});
