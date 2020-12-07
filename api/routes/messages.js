@@ -55,7 +55,6 @@ router.get('/room/:id', asyncHandler( async (req, res) => {
 // POST new Message
 router.post('/create', asyncHandler( async (req, res) => {
 
-    console.log(req.body.profile_id);
     const message = await Message.create({
         content: req.body.content,
         profile_id: req.body.profile_id,
