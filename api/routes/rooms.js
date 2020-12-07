@@ -56,6 +56,32 @@ router.post('/join', asyncHandler( async (req, res) => {
     }
 }));
 
+// PUT to set the current track uri and position in the room
+router.put('/sync', asyncHandler( async (req, res) => {
+    const room = await Room.findByPk(req.body.room_id);
+
+    await room.update({
+        current_uri: req.body.current_uri,
+        position_ms: req.body.position_ms
+    })
+        .then( res.status(200) )
+}));
+
+// GET the current track uri and position in the room 
+router.get('/sync/:room', asyncHandler( async (req, res) => {
+    const room = await Room.findByPk(req.params.room);
+
+    if ( room.dataValues.current_uri !== null ) {
+        res.json({
+            status: 200,
+            current_uri: room.dataValues.current_uri,
+            position_ms: room.dataValues.position_ms
+        })
+    } else {
+        res.status(404).json({ status: 404, message: "current_uri is not defined" })
+    }
+}));
+
 // GET average sentiment of a room
 router.get('/sentiment/:room_id', asyncHandler( async (req, res) => {
 
@@ -118,7 +144,6 @@ router.get('/user/:user', asyncHandler( async (req, res) => {
 
 // GET playlist array of objects
 router.get('/playlist/:room', asyncHandler( async (req, res) => {
-    console.log( typeof req.params.room)
     if (req.params.room != 'undefined' ) {
         const room = await Room.findByPk(req.params.room);
         res.json(Object.values(JSON.parse(room.playlist)))
