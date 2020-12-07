@@ -22,7 +22,12 @@ module.exports = (sequelize) => {
     skip_vote: {
       type: Sequelize.DataTypes.INTEGER,
       defaultValue: 0
-    }
+    },
+    current_uri: Sequelize.DataTypes.STRING,
+    position_ms: {
+      type: Sequelize.DataTypes.INTEGER,
+      defaultValue: 0
+    },
   }, { sequelize });
 
   Room.associate = (models) => {
