@@ -17,6 +17,7 @@
     "morgan": "~1.9.1",
     "natural": "^2.1.5",
     "node-fetch": "^2.6.1",
+    "prettyjson": "^1.2.1",
     "request": "^2.88.2",
     "sequelize": "^6.3.5",
     "sequelize-cli": "^6.2.0",
