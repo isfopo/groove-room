@@ -12,23 +12,22 @@ const SpotifyWebApi = require('spotify-web-api-js');
 
 export const Room = (props) => {
 
-    // TODO: start playing room's current song on spotify
-        // fetch current song uri and position_ms from db
-
     const spotifyApi = new SpotifyWebApi();
 
     const { user, auth, room, profile, setProfile } = props
 
     const [expanded, setExpanded] = useState(false);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [isPrompted, setIsPrompted] = useState(false);
     const [profiles, setProfiles] = useState([]);
     const [messages, setMessages] = useState([]);
+    const [devices, setDevices] = useState([]);
 
-
-    useEffect(() => {
+    const getProfiles = () => {
         fetch(`http://localhost:3001/profiles/room/${room.id}`)
             .then(res => res.json())
             .then(res => setProfiles(res))
-    }, [room])
+    }
     
     useEffect(() => {
         const [ user_profile ] = profiles.filter(profile => profile.user_id === user.id)
@@ -51,78 +50,131 @@ export const Room = (props) => {
     }
 
     const sync = async () => {
-        await spotifyApi.setAccessToken(auth.access_token);
+        if (isPlaying) {
+            await spotifyApi.setAccessToken(auth.access_token);
+            
+            const player = await spotifyApi.getMyCurrentPlaybackState();
 
-        const player = await spotifyApi.getMyCurrentPlaybackState();
-
-        fetch('http://localhost:3001/rooms/sync', {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            method: "PUT",
-            body: JSON.stringify({
-                room_id: room.id,
-                current_uri: player.item.uri,
-                position_ms: player.progress_ms
-            })
-        })
-
+            if (player) {
+                console.log('called sync()')
+                fetch('http://localhost:3001/rooms/sync', {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    method: "PUT",
+                    body: JSON.stringify({
+                        room: props.room,
+                        player: player
+                    })
+                })
+            }
+        }
     }
 
     const play = async () => {
+        console.log('called play()')
+        setIsPlaying(true)
         await spotifyApi.setAccessToken(auth.access_token);
-        // FIXME: spotify has to be playing for this to work - is there a way to start/open spotify from here?
-            // spotify is looking for active devices - if there are none then there is a 404 code returned
-                // active devices can be called for
-                // maybe if we get a 404 error then prompt user to open spotify? 
+        
+        const devicesResponse = Object.values(Object.values( await spotifyApi.getMyDevices())[0]);
+        setDevices(devicesResponse);
 
-        fetch(`http://localhost:3001/rooms/sync/${room.id}`)
-            .then(res => res.json())
-            .then(res => {
-                if ( res.status === 200 ) {
-                    spotifyApi.play({
-                        "uris": JSON.parse(room.playlist).map( track => track.uri ),
-                        "offset": {
-                            "uri": res.current_uri
-                        },
-                        "position_ms": res.position_ms
-                    });
-                } else if ( res.status === 404) {
-                    spotifyApi.play({
-                        "uris": JSON.parse(room.playlist).map( track => track.uri )
-                    });
-                }
-            })
+
+        if ( devicesResponse.map(device => device.is_active).includes(true)) {
+            fetch(`http://localhost:3001/rooms/sync/${room.id}`)
+                .then(res => res.json())
+                .then(res => {
+                    if ( res.status === 200 ) {
+                        spotifyApi.play({
+                            "uris": JSON.parse(room.playlist).map( track => track.uri ),
+                            "offset": {
+                                "uri": res.current_uri
+                            },
+                            "position_ms": res.position_ms
+                        });
+                    } else if ( res.status === 404) {
+                        spotifyApi.play({
+                            "uris": JSON.parse(room.playlist).map( track => track.uri )
+                        });
+                    } else {
+                        console.log(res)
+                    }
+                })
+        } else {
+            setIsPrompted(true)
+        }
+    }
+
+    const handlePrompt = async (device) => {
+        console.log(device)
+        await spotifyApi.setAccessToken(auth.access_token);
+        // set active device in spotify api
+        spotifyApi.transferMyPlayback([device.id], {play: true})
+
+        // call play again
+        play()
+        setIsPrompted(false);
     }
 
     const pause = async () => {
+        console.log('called pause()')
+        setIsPlaying(false)
         await spotifyApi.setAccessToken(auth.access_token);
-        spotifyApi.pause()
+        spotifyApi.pause().catch(res => {
+            if (res.status === 404) {
+                setIsPrompted(true)
+            }
+        })
     }
     
     useEffect( () => {
+        getProfiles()
         if ( !isEmpty(room) && room.playlist ) {
             play();
         } else {
             pause();
         }
-    }, [room])
+        
+        return () => {
+            sync()
+        }
+    }, [room]);
 
     return (
         <div className="room">
-            <button onClick={() => sync()} >sync</button>
-                { expanded ? 
-                    <div className="expanded-view">
-                        <img className="arrows contract" src={contract} alt="contract" onMouseEnter={less} />
-                        <div className="all-messages">
+            { expanded ? 
+                <div className="expanded-view">
+                    <img className="arrows contract" src={contract} alt="contract" onMouseEnter={less} />
+                    <div className="all-messages">
+                        {
+                            messages.map( message => 
+                                <Message key={message.id} userProfile={profile} message={message} />
+                            )
+                        }
+                    </div>
+                </div>
+            :
+                <>
+                    { isPrompted ?
+                        <div className="prompt">
+                            <p>Which device would you like to listen on?</p>
                             {
-                                messages.map( message => 
-                                    <Message key={message.id} userProfile={profile} message={message} />
+                                devices.map( device => 
+                                    <button onClick={() => handlePrompt(device)}>
+                                        {device.name} - {device.type}
+                                    </button>
                                 )
                             }
+                            <a href="https://open.spotify.com/" target="_blank" rel="noopener noreferrer">
+                                Open Spotify Web Player
+                            </a>
                         </div>
-                    </div>
-                :
+                    :
+                        devices.filter( device => device.is_active ).length > 0 &&
+                            <div className="listening-on">
+                                <p>Listening on {devices.filter(device => device.is_active)[0].name}</p> 
+                            </div>
+                    }
                     <div className="regular-view">
                         {
                             profiles.map( profile => 
@@ -131,7 +183,8 @@ export const Room = (props) => {
                         }
                         <img className="arrows expand" src={expand} alt="expand" onMouseEnter={more} />
                     </div>
-                }
+                </>
+            }
         </div>
     )
 }
