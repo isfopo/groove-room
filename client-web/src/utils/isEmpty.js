@@ -3,7 +3,7 @@
  * @param {Object} obj to check
  */
 
-export const isEmpty = ( obj ) =>{
+export const isEmpty = ( obj ) => {
     for(var i in obj) return false; 
     return true;  
 }
