@@ -13,7 +13,6 @@ import logout from '../icons/logout.svg'
 
 export const Home = (props) => {
 
-    
     const { user, auth, history, location } = props;
 
     const [room, setRoom] = useState(() => location.state ? location.state.room : {});
