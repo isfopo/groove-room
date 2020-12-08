@@ -40,7 +40,7 @@ export const App = () => {
             .then(res => setUser(res[0]))
         })
   }
-  
+
   return (
     <div className="main">
       <BrowserRouter>
