@@ -18,6 +18,12 @@ export const Home = (props) => {
     const [room, setRoom] = useState(() => location.state ? location.state.room : {});
     const [profile, setProfile] = useState({});
     
+    const getRoom = id => {
+        fetch(`http://localhost:3001/${id}`)
+            .then(res => res.json())
+            .then(res => setRoom(res))
+    }
+
     const handleSetRoom = (newRoom) => {
         setRoom(newRoom)
     }
@@ -44,6 +50,7 @@ export const Home = (props) => {
                         history={history}
                         room={room}
                         setRoom={handleSetRoom}
+                        getRoom={getRoom}
                         profile={profile}
                     />
                     <Room 
