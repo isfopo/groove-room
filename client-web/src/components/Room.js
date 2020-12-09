@@ -3,6 +3,7 @@ import { Profile } from './Profile';
 
 import expand from '../icons/expand_more-24px.svg';
 import contract from '../icons/expand_less-24px.svg';
+import back from "../icons/arrow_back_ios-24px.svg";
 
 import '../styles/Room.css';
 import { Message } from './Message';
@@ -79,7 +80,6 @@ export const Room = (props) => {
         const devicesResponse = Object.values(Object.values( await spotifyApi.getMyDevices())[0]);
         setDevices(devicesResponse);
 
-
         if ( devicesResponse.map(device => device.is_active).includes(true)) {
             fetch(`http://localhost:3001/rooms/sync/${room.id}`)
                 .then(res => res.json())
@@ -106,12 +106,8 @@ export const Room = (props) => {
     }
 
     const handlePrompt = async (device) => {
-        console.log(device)
         await spotifyApi.setAccessToken(auth.access_token);
-        // set active device in spotify api
         spotifyApi.transferMyPlayback([device.id], {play: true})
-
-        // call play again
         play()
         setIsPrompted(false);
     }
@@ -139,7 +135,8 @@ export const Room = (props) => {
             sync()
         }
     }, [room]);
-
+    // TODO: remind to add new track when on last track
+    // FIXME: after returning from adding a new track, that new track is not added until a page refresh
     return (
         <div className="room">
             { expanded ? 
@@ -159,8 +156,8 @@ export const Room = (props) => {
                         <div className="prompt">
                             <p>Which device would you like to listen on?</p>
                             {
-                                devices.map( device => 
-                                    <button onClick={() => handlePrompt(device)}>
+                                devices.map( (device, key) => 
+                                    <button key={key} onClick={() => handlePrompt(device)}>
                                         {device.name} - {device.type}
                                     </button>
                                 )
@@ -168,10 +165,13 @@ export const Room = (props) => {
                             <a href="https://open.spotify.com/" target="_blank" rel="noopener noreferrer">
                                 Open Spotify Web Player
                             </a>
+                            <button onClick={() => setIsPrompted(false)}>
+                                <img src={back} alt="back" />
+                            </button>
                         </div>
                     :
                         devices.filter( device => device.is_active ).length > 0 &&
-                            <div className="listening-on">
+                            <div className="listening-on" onClick={() => setIsPrompted(true)}>
                                 <p>Listening on {devices.filter(device => device.is_active)[0].name}</p> 
                             </div>
                     }
