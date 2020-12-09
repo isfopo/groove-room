@@ -223,7 +223,7 @@ router.put('/add-track', asyncHandler( async (req, res) => {
     let arrayToUpdate = []
 
     if (room.playlist) {
-        arrayToUpdate = [ ... currentPlaylist, newSong ]
+        arrayToUpdate = [ newSong, ...currentPlaylist ]
     } else {
         arrayToUpdate = [ newSong ]
     }
