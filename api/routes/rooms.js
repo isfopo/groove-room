@@ -1,11 +1,17 @@
 var express = require('express');
 var router = express.Router();
+
+const EventEmitter = require('events');
+const emitter = new EventEmitter();
+
 var Room = require('../db/models').Room;
 var Profile = require('../db/models').Profile;
 var Message = require('../db/models').Message;
 const { Op } = require("sequelize");
+
 const asyncHandler = require('../utils/asyncHandler.js');
 var prettyjson = require('prettyjson'); // TODO: delete for production
+const { emit } = require('process');
 
 // POST create new room
 router.post('/create', asyncHandler( async (req, res) => {
@@ -25,8 +31,10 @@ router.post('/create', asyncHandler( async (req, res) => {
     res.json(room.dataValues);
 }));
 
-// POST find and join existing room
+// POST find and join existing room -- TODO: test with other profile
 router.post('/join', asyncHandler( async (req, res) => {
+
+    emitter.emit('update', req.body.room_id)
 
     const userInRoom = await Profile.findAll({
         where: {
@@ -161,8 +169,33 @@ router.get('/playlist/:room', asyncHandler( async (req, res) => {
     }
 }))
 
-// PUT a new name into a room
+// GET SSE that signals updates for several room attributes (new profiles, room name, track in playlist)
+router.get('/update/:id', asyncHandler( async (req, res) => {
+    res.set({
+        'Cache-Control': 'no-cache',
+        'Content-Type': 'text/event-stream',
+        'Connection': 'keep-alive'
+      });
+    res.flushHeaders();
+    res.write('retry: 10000\n\n');
+
+    if (req.params.id) {
+        res.write(`data: room with id ${req.params.id} connected!\n\n`);
+    }
+
+    // called when a new profile is added to room
+    emitter.on('update', id => {
+        if (id === req.params.id) {
+            res.write(`update room`)
+        }
+    })
+}))
+
+// PUT a new name into a room - TODO: test with other profile
 router.put('/invite', asyncHandler( async (req, res) => {
+
+    emitter.emit('update', req.body.room_id)
+
     const roomToRename = await Room.findByPk(req.body.room_id);
     roomToRename.name = req.body.room_name;
     roomToRename.save();
@@ -172,6 +205,8 @@ router.put('/invite', asyncHandler( async (req, res) => {
 
 // PUT a new track onto playlist
 router.put('/add-track', asyncHandler( async (req, res) => {
+
+    emitter.emit('update', req.body.room.id)
 
     const room = await Room.findByPk(req.body.room.id);
 

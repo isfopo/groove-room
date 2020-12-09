@@ -123,12 +123,8 @@ export const Room = (props) => {
     useEffect(() => {
         const source = new EventSource(`http://localhost:3001/messages/update-room/${JSON.stringify(profiles.map(profile => profile.id))}`);
         source.addEventListener('message', message => {
-            console.log('Got:', message)
             getAllMessages();
         })
-
-        // TODO: do something similar when there is a new profile in room
-        // disconnect when room changes
         return () => source.close()
     }, [profiles])
 
@@ -145,10 +141,18 @@ export const Room = (props) => {
             pause();
         }
         
+        const source = new EventSource(`http://localhost:3001/rooms/update/${room.id}`);
+        source.addEventListener('message', message => {
+            console.log('Got:', message)
+            getProfiles()
+        })
+
         return () => {
             sync()
+            source.close()
         }
     }, [room]);
+
     // TODO: remind to add new track when on last track
     // FIXME: after returning from adding a new track, that new track is not added until a page refresh
     return (

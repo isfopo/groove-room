@@ -13,11 +13,27 @@ export const LeftSidebar = (props) => {
     const { user, profile, room, setRoom, history } = props;
     const [ activeRooms, setActiveRooms ] = useState([]);
 
-    useEffect(() => {
+    const getActiveRooms = () => {
         fetch(`http://localhost:3001/rooms/user/${user.id}`)
             .then(res => res.json())
             .then(res => setActiveRooms(res))
+    }
+
+    useEffect(() => {
+        getActiveRooms()
     }, [user.id])
+
+    useEffect(() => {
+        const source = new EventSource(`http://localhost:3001/rooms/update/${room.id}`);
+        source.addEventListener('message', message => {
+            console.log('Got:', message)
+            getActiveRooms()
+        })
+        return () => {
+            source.close()
+        }
+    }, [])
+    
 
     return (
         <div className="sidebar left">
