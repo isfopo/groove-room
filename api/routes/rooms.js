@@ -52,16 +52,16 @@ router.post('/join', asyncHandler( async (req, res) => {
     })
 
     if ( userInRoom.length > 0 ) {
-        res.sendStatus(304);
+        res.json({status: 304, room_id: req.body.room_id});
     } else if ( roomExists.length === 0 ) {
-        res.sendStatus(404);
+        res.json({status: 404});
     } else {
         const addProfileToRoom = await Profile.create({
             user_id: req.body.user_id,
             image: req.body.user_image,
             room_id: req.body.room_id
         })
-        res.sendStatus(200)
+        res.json({status: 200})
     }
 }));
 
@@ -83,6 +83,14 @@ router.put('/sync', asyncHandler( async (req, res) => {
     }
 
 }));
+
+// GET room by id
+router.get('/:id', asyncHandler( async (req, res) => {
+    const room = await Room.findByPk(req.params.id);
+
+    console.log(req.params.id)
+    res.json(room.dataValues)
+}))
 
 // GET the current track uri and position in the room 
 router.get('/sync/:room', asyncHandler( async (req, res) => {
@@ -186,12 +194,12 @@ router.get('/update/:id', asyncHandler( async (req, res) => {
     // called when a new profile is added to room
     emitter.on('update', id => {
         if (id === req.params.id) {
-            res.write(`update room`)
+            res.write(`data:${id}\n\n`)
         }
     })
 }))
 
-// PUT a new name into a room - TODO: test with other profile
+// PUT rename a room - TODO: test with other profile
 router.put('/invite', asyncHandler( async (req, res) => {
 
     emitter.emit('update', req.body.room_id)
