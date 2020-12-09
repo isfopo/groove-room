@@ -5,6 +5,7 @@ var Profile = require('../db/models').Profile;
 var Message = require('../db/models').Message;
 const { Op } = require("sequelize");
 const asyncHandler = require('../utils/asyncHandler.js');
+var prettyjson = require('prettyjson'); // TODO: delete for production
 
 // POST create new room
 router.post('/create', asyncHandler( async (req, res) => {
@@ -58,13 +59,21 @@ router.post('/join', asyncHandler( async (req, res) => {
 
 // PUT to set the current track uri and position in the room
 router.put('/sync', asyncHandler( async (req, res) => {
-    const room = await Room.findByPk(req.body.room_id);
+    const room = await Room.findByPk(req.body.room.id);
 
-    await room.update({
-        current_uri: req.body.current_uri,
-        position_ms: req.body.position_ms
-    })
-        .then( res.status(200) )
+    // TODO: if  position_ms is greater than duration of song, sync next uri in playlist at position_ms 0
+    
+    // validate that current_uri is in playlist
+    if (JSON.parse(req.body.room.playlist).map(track => track.uri).includes(req.body.player.item.uri)) {
+        await room.update({
+            current_uri: req.body.player.item.uri,
+            position_ms: req.body.player.progress_ms
+        })
+            .then( res.status(200) )
+    } else {
+        throw Error("That track is not in this playlist!")
+    }
+
 }));
 
 // GET the current track uri and position in the room 
