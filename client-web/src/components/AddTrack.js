@@ -37,8 +37,11 @@ export const AddTrack = (props) => {
         fetch(`http://localhost:3001/rooms/sentiment/${room.id}`)
             .then(res => res.json())
             .then(res => {
+
                 spotifyApi.getRecommendations({
-                    seed_tracks: Object.values(recent),
+                    seed_tracks: JSON.parse(room.playlist).length >= 5 ? 
+                                    JSON.parse(room.playlist).map(track => track.id).slice(0, 5) : 
+                                    Object.values(recent),
                     target_valence: scale(res.sentiment, [-5.0, 5.0], [0, 1] ),
                     limit: 5
                 })
