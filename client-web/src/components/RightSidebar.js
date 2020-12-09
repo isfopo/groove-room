@@ -1,4 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
+
+import { TrackLineItem } from './TrackLineItem'
 
 import add from '../icons/playlist_add-24px.svg';
 import skip from '../icons/skip_next-24px.svg';
@@ -6,26 +8,48 @@ import playlistIcon from '../icons/queue_music-24px.svg';
 
 import '../styles/Sidebar.css';
 
+const SpotifyWebApi = require('spotify-web-api-js');
+
 export const RightSidebar = (props) => {
 
+    const spotifyApi = new SpotifyWebApi();
+
     const { user, auth, profile, room, history } = props;
+    const [activeTrack, setActiveTrack] = useState({})
 
     // TODO: show thumbnail of who added track
     // TODO: implement skip vote
+    // TODO: add color extraction - https://www.npmjs.com/package/react-color-extractor
     
+    const handleSetActiveTrack = async (track) => {
+
+        await spotifyApi.setAccessToken(auth.access_token);
+        spotifyApi.play({
+            "uris": JSON.parse(room.playlist).map( track => track.uri ),
+            "offset": {
+                "uri": track.uri
+            },
+        });
+        setActiveTrack(track)
+    }
+
     return (
         <div className="sidebar right">
             <img className="handle handle-right" src={ playlistIcon } alt="playlist" />
 
             <div className="playlist-display">
+
                 { room.playlist &&
                     JSON.parse(room.playlist).map( (track, key) => 
-                        <div key={key}>
-                            <img className="thumbnail" src={track.album.images[0].url} alt={`${track.album.name} cover`} />
-                            <p><strong>{track.name}</strong> - {track.artists[0].name}</p>
-                        </div>
+                            <TrackLineItem 
+                                key={key}
+                                track={track}
+                                active={track.id === activeTrack.id}
+                                setActiveTrack={handleSetActiveTrack}
+                            />
                     )
                 }
+
             </div>
             
             <button onClick={() => history.push({ pathname: "/add-track", state: { user, room, auth, profile }})} >
