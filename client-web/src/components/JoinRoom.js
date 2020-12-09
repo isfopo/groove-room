@@ -31,17 +31,18 @@ export const JoinRoom = (props) => {
                 user_id: user.id,
                 user_image: user.image
             })
-        }).then(res => {
+        })
+        .then(res => res.json())
+        .then(res => {
             setResponseStatus(res.status)
             if (res.status === 200) {
                 setTimeout(() => {
                     history.push({ pathname: '/', state: { user, room }})
                 }, 3000);
-            }     
+            }
         })
+            
     }
-
-    // TODO: when user attempts to join room that they are already in, return to home with that room selected
 
     return (
         <div className="join-room">
