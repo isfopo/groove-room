@@ -11,6 +11,8 @@ import { isEmpty } from '../utils/isEmpty';
 
 const SpotifyWebApi = require('spotify-web-api-js');
 
+// TODO: limit room size
+
 export const Room = (props) => {
 
     const spotifyApi = new SpotifyWebApi();
@@ -29,11 +31,6 @@ export const Room = (props) => {
             .then(res => res.json())
             .then(res => setProfiles(res))
     }
-    
-    useEffect(() => {
-        const [ user_profile ] = profiles.filter(profile => profile.user_id === user.id)
-        setProfile(user_profile);
-    }, [setProfile, profiles, user.id])
 
     const getAllMessages = () => {
         fetch(`http://localhost:3001/messages/room/${room.id}`)
@@ -122,7 +119,24 @@ export const Room = (props) => {
             }
         })
     }
-    
+        
+    useEffect(() => {
+        const source = new EventSource(`http://localhost:3001/messages/update-room/${JSON.stringify(profiles.map(profile => profile.id))}`);
+        source.addEventListener('message', message => {
+            console.log('Got:', message)
+            getAllMessages();
+        })
+
+        // TODO: do something similar when there is a new profile in room
+        // disconnect when room changes
+        return () => source.close()
+    }, [profiles])
+
+    useEffect(() => {
+        const [ user_profile ] = profiles.filter(profile => profile.user_id === user.id)
+        setProfile(user_profile);
+    }, [setProfile, profiles, user.id])
+
     useEffect( () => {
         getProfiles()
         if ( !isEmpty(room) && room.playlist ) {

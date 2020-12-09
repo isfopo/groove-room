@@ -1,11 +1,16 @@
 const express = require('express');
 const router = express.Router();
+const EventEmitter = require('events');
+const emitter = new EventEmitter();
 const getSentiment = require('../utils/getSentiment.js');
 const asyncHandler = require('../utils/asyncHandler.js');
 
 const Room = require('../db/models').Room;
 const Profile = require('../db/models').Profile;
 const Message = require('../db/models').Message;
+
+// TODO: push a new message to every user
+    // add a path to an SSE that sends a response that a new message has been posted and the client should update
 
 // GET last message from a Profile
 router.get('/last/:id', asyncHandler( async (req, res) => {
@@ -25,6 +30,28 @@ router.get('/last/:id', asyncHandler( async (req, res) => {
         })
     }
 }))
+
+// GET SSE a new message has been sent
+router.get('/update-profile/:id', asyncHandler( async ( req, res ) => {
+    res.set({
+        'Cache-Control': 'no-cache',
+        'Content-Type': 'text/event-stream',
+        'Connection': 'keep-alive'
+      });
+    res.flushHeaders();
+    res.write('retry: 10000\n\n');
+    res.write(`data: profile connected!\n\n`);
+
+    // listen for message posted
+    emitter.on('message-profile', messageProfileId => {
+        // check if profile id matches
+        // TODO: test this with another account
+        if ( messageProfileId == req.params.id ) {
+            // use res.write(`string`) to send the client a message
+            res.write(`data: New message on this profile!\n\n`)
+        }
+    })
+}));
 
 // GET all messages in Room
 router.get('/room/:id', asyncHandler( async (req, res) => {
@@ -52,8 +79,37 @@ router.get('/room/:id', asyncHandler( async (req, res) => {
     res.json(roomMessages);
 }))
 
+// GET SSE a new message has been sent
+router.get('/update-room/:ids', asyncHandler( async ( req, res ) => {
+    res.set({
+        'Cache-Control': 'no-cache',
+        'Content-Type': 'text/event-stream',
+        'Connection': 'keep-alive'
+      });
+    res.flushHeaders();
+    res.write('retry: 10000\n\n');
+    res.write(`data: room connected!\n\n`);
+
+    const profileIds = JSON.parse( req.params.ids )
+    
+    emitter.on('message-room', messageProfileId => {
+        
+        // TODO: test this with another account
+        // check if profile id matches any profiles in room
+        const inThisRoom = profileIds.includes(messageProfileId)
+        if ( inThisRoom ) {
+            // use res.write(`string`) to send the client a message
+            res.write(`data: New message in this room!\n\n`)
+        }
+    })
+}));
+
 // POST new Message
 router.post('/create', asyncHandler( async (req, res) => {
+
+    emitter.emit('message-room', req.body.profile_id);
+    emitter.emit('message-profile', req.body.profile_id);
+    //console.log(req.body)
 
     const message = await Message.create({
         content: req.body.content,

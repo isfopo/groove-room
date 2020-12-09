@@ -8,19 +8,19 @@ export const Profile = (props) => {
     const [newMessage, setNewMessage] = useState('');
     const [lastMessage, setLastMessage] = useState('');
 
-    useEffect(() => {
+    const getLastMessage = () => {
         fetch(`http://localhost:3001/messages/last/${profile.id}`)
-            .then(res => res.json())
-            .then(res => {
-                if (res.status === 200)
-                {
-                    setLastMessage(res.dataValues.content)
-                } else {
-                    setReadyToType(true)
-                } 
-            })
-    }, [profile, newMessage])
-
+        .then(res => res.json())
+        .then(res => {
+            if (res.status === 200)
+            {
+                setLastMessage(res.dataValues.content)
+            } else {
+                setReadyToType(true)
+            } 
+        })
+    }
+    
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -38,6 +38,20 @@ export const Profile = (props) => {
         setNewMessage('');
         setReadyToType(false);
     }
+
+    useEffect(() => {
+        const source = new EventSource(`http://localhost:3001/messages/update-profile/${profile.id}`);
+        source.addEventListener('message', message => {
+            console.log('Got:', message)
+            getLastMessage();
+        })
+        // disconnect when room changes
+        return () => source.close()
+    }, [])
+
+    useEffect(() => {
+        getLastMessage();
+    }, [profile, newMessage])
 
     return (
         <div className={`profile ${ profile.user_id === user.id && 'active'}`}>
