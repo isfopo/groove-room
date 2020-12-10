@@ -3,6 +3,7 @@ var router = express.Router();
 var Room = require('../db/models').Room;
 var Profile = require('../db/models').Profile;
 const asyncHandler = require('../utils/asyncHandler.js');
+var prettyjson = require('prettyjson'); // TODO: delete for production
 
 // GET Profile by id
 router.get('/:id', asyncHandler( async (req, res) => {
@@ -21,6 +22,21 @@ router.get('/room/:room_id', asyncHandler( async (req, res) => {
 
     res.json(profiles)
 }));
+
+// PUT update listening_to
+router.put('/listening-to', asyncHandler( async (req, res) => {
+
+    console.log(prettyjson.render(req.body))
+    const profile = await Profile.findByPk(req.body.profile_id);
+
+    await profile.update({
+        listening_to: req.body.track_id
+    })
+        .then( res.status(200) )
+        .catch( res.status(500) )
+}))
+
+// TODO: add an SSE path that triggers profile update
 
 // DELETE Profile
 router.delete('/delete', asyncHandler( async (req, res) => {

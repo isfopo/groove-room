@@ -4,7 +4,11 @@ const Sequelize = require('sequelize');
 module.exports = (sequelize) => {
   class Profile extends Sequelize.Model {}
   Profile.init({
-      image: Sequelize.STRING
+      image: Sequelize.STRING,
+      listening_to: {
+        type: Sequelize.STRING,
+        allowNull: true
+      }
   }, { sequelize });
 
   Profile.associate = (models) => {
