@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
+// TODO: show last song from room a person is listening to
+
 export const Profile = (props) => {
 
     const { user, profile } = props;
