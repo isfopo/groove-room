@@ -7,11 +7,8 @@ import back from "../icons/arrow_back_ios-24px.svg";
 
 import '../styles/Room.css';
 import { Message } from './Message';
-import { isEmpty } from '../utils/isEmpty';
 
 const SpotifyWebApi = require('spotify-web-api-js');
-
-// TODO: limit room size
 
 export const Room = (props) => {
 
@@ -20,7 +17,6 @@ export const Room = (props) => {
     const { user, auth, room, profile, setProfile } = props
 
     const [expanded, setExpanded] = useState(false);
-    const [isPlaying, setIsPlaying] = useState(false);
     const [isPrompted, setIsPrompted] = useState(false);
     const [profiles, setProfiles] = useState([]);
     const [messages, setMessages] = useState([]);
@@ -47,30 +43,7 @@ export const Room = (props) => {
         setExpanded(false);
     }
 
-    const sync = async () => {
-        if (isPlaying) {
-            await spotifyApi.setAccessToken(auth.access_token);
-            
-            const player = await spotifyApi.getMyCurrentPlaybackState();
-
-            if (player) {
-                console.log('called sync()')
-                fetch('http://localhost:3001/rooms/sync', {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    method: "PUT",
-                    body: JSON.stringify({
-                        room: props.room,
-                        player: player
-                    })
-                })
-            }
-        }
-    }
-
     const getDevices = async () => {
-        setIsPlaying(true) // TODO: get to track play function
         await spotifyApi.setAccessToken(auth.access_token);
         
         const devicesResponse = Object.values(Object.values( await spotifyApi.getMyDevices())[0]);
@@ -89,7 +62,7 @@ export const Room = (props) => {
     const handleOpenWebPlayer = async () => {
         setTimeout( async () => {
             const devices = Object.values(Object.values( await spotifyApi.getMyDevices())[0]);
-            
+
             if ( devices.filter(device => device.name.includes("Web Player")).length !== 0 ) {
                 handlePrompt(devices.filter(device => device.name.includes("Web Player"))[0])
             } else {
@@ -97,17 +70,6 @@ export const Room = (props) => {
                 handleOpenWebPlayer()
             }
         }, 1000)
-    }
-
-    const pause = async () => {
-        console.log('called pause()')
-        setIsPlaying(false)
-        await spotifyApi.setAccessToken(auth.access_token);
-        spotifyApi.pause().catch(res => {
-            if (res.status === 404) {
-                setIsPrompted(true)
-            }
-        })
     }
         
     useEffect(() => {
@@ -126,11 +88,6 @@ export const Room = (props) => {
     useEffect( () => {
         getProfiles()
         getDevices()
-        // if ( !isEmpty(room) && room.playlist ) {
-        //     play();
-        // } else {
-        //     pause();
-        // }
         
         const source = new EventSource(`http://localhost:3001/rooms/update/${room.id}`);
         source.addEventListener('message', message => {
@@ -139,7 +96,6 @@ export const Room = (props) => {
         })
 
         return () => {
-            //sync()
             source.close()
         }
     }, [room]);
