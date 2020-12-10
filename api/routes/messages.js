@@ -9,9 +9,6 @@ const Room = require('../db/models').Room;
 const Profile = require('../db/models').Profile;
 const Message = require('../db/models').Message;
 
-// TODO: push a new message to every user
-    // add a path to an SSE that sends a response that a new message has been posted and the client should update
-
 // GET last message from a Profile
 router.get('/last/:id', asyncHandler( async (req, res) => {
     
@@ -40,7 +37,6 @@ router.get('/update-profile/:id', asyncHandler( async ( req, res ) => {
       });
     res.flushHeaders();
     res.write('retry: 10000\n\n');
-    res.write(`data: profile connected!\n\n`);
 
     // listen for message posted
     emitter.on('message-profile', messageProfileId => {
@@ -88,7 +84,6 @@ router.get('/update-room/:ids', asyncHandler( async ( req, res ) => {
       });
     res.flushHeaders();
     res.write('retry: 10000\n\n');
-    res.write(`data: room connected!\n\n`);
 
     const profileIds = JSON.parse( req.params.ids )
     

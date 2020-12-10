@@ -3,6 +3,8 @@ import queryString from 'query-string';
 
 import more from '../icons/more_vert-24px.svg'
 
+// TODO: maybe display notification when there is a new message and/or new song in room?
+
 export const RoomLineItem = (props) => {
 
     const { user, room, profile, active, history } = props;
