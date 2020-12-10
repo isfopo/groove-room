@@ -13,6 +13,8 @@ const asyncHandler = require('../utils/asyncHandler.js');
 var prettyjson = require('prettyjson'); // TODO: delete for production
 const { emit } = require('process');
 
+// TODO: limit room size
+
 // POST create new room
 router.post('/create', asyncHandler( async (req, res) => {
 
@@ -65,7 +67,7 @@ router.post('/join', asyncHandler( async (req, res) => {
     }
 }));
 
-// PUT to set the current track uri and position in the room
+// PUT to set the current track uri and position in the room 
 router.put('/sync', asyncHandler( async (req, res) => {
     const room = await Room.findByPk(req.body.room.id);
 
