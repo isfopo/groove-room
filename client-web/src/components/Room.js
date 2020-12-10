@@ -69,35 +69,13 @@ export const Room = (props) => {
         }
     }
 
-    const play = async () => {
-        console.log('called play()')
-        setIsPlaying(true)
+    const getDevices = async () => {
+        setIsPlaying(true) // TODO: get to track play function
         await spotifyApi.setAccessToken(auth.access_token);
         
         const devicesResponse = Object.values(Object.values( await spotifyApi.getMyDevices())[0]);
         setDevices(devicesResponse);
-
-        if ( devicesResponse.map(device => device.is_active).includes(true)) {
-            fetch(`http://localhost:3001/rooms/sync/${room.id}`)
-                .then(res => res.json())
-                .then(res => {
-                    if ( res.status === 200 ) {
-                        spotifyApi.play({
-                            "uris": JSON.parse(room.playlist).map( track => track.uri ),
-                            "offset": {
-                                "uri": res.current_uri
-                            },
-                            "position_ms": res.position_ms
-                        });
-                    } else if ( res.status === 404) {
-                        spotifyApi.play({
-                            "uris": JSON.parse(room.playlist).map( track => track.uri )
-                        });
-                    } else {
-                        console.log(res)
-                    }
-                })
-        } else {
+        if ( !devicesResponse.map(device => device.is_active).includes(true)) {
             setIsPrompted(true)
         }
     }
@@ -105,8 +83,20 @@ export const Room = (props) => {
     const handlePrompt = async (device) => {
         await spotifyApi.setAccessToken(auth.access_token);
         spotifyApi.transferMyPlayback([device.id], {play: true})
-        play()
         setIsPrompted(false);
+    }
+
+    const handleOpenWebPlayer = async () => {
+        setTimeout( async () => {
+            const devices = Object.values(Object.values( await spotifyApi.getMyDevices())[0]);
+            
+            if ( devices.filter(device => device.name.includes("Web Player")).length !== 0 ) {
+                handlePrompt(devices.filter(device => device.name.includes("Web Player"))[0])
+            } else {
+                console.log('called again')
+                handleOpenWebPlayer()
+            }
+        }, 1000)
     }
 
     const pause = async () => {
@@ -135,11 +125,12 @@ export const Room = (props) => {
 
     useEffect( () => {
         getProfiles()
-        if ( !isEmpty(room) && room.playlist ) {
-            play();
-        } else {
-            pause();
-        }
+        getDevices()
+        // if ( !isEmpty(room) && room.playlist ) {
+        //     play();
+        // } else {
+        //     pause();
+        // }
         
         const source = new EventSource(`http://localhost:3001/rooms/update/${room.id}`);
         source.addEventListener('message', message => {
@@ -148,7 +139,7 @@ export const Room = (props) => {
         })
 
         return () => {
-            sync()
+            //sync()
             source.close()
         }
     }, [room]);
@@ -180,7 +171,7 @@ export const Room = (props) => {
                                     </button>
                                 )
                             }
-                            <a href="https://open.spotify.com/" target="_blank" rel="noopener noreferrer">
+                            <a href="https://open.spotify.com/" target="_blank" rel="noopener noreferrer" onClick={() => handleOpenWebPlayer()}>
                                 Open Spotify Web Player
                             </a>
                             <button onClick={() => setIsPrompted(false)}>
