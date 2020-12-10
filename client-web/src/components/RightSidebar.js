@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 import { TrackLineItem } from './TrackLineItem'
 
@@ -19,8 +19,25 @@ export const RightSidebar = (props) => {
 
     // TODO: show thumbnail of who added track
     // TODO: implement skip vote
+    // TODO: update active track when song is over
     // TODO: add color extraction - https://www.npmjs.com/package/react-color-extractor
     
+    const updateActiveTrack = async () => {
+        // get info about the player
+        await spotifyApi.setAccessToken(auth.access_token);
+        spotifyApi.getMyCurrentPlaybackState()
+            .then(res => setActiveTrack(res.item))
+    }
+
+    useEffect(() => {
+        const trackListener = setInterval(() => {
+            updateActiveTrack()
+        }, 3000)
+        return () => {
+            clearInterval(trackListener)
+        }
+    }, [room])
+
     const handleSetActiveTrack = async (track) => {
 
         await spotifyApi.setAccessToken(auth.access_token);
