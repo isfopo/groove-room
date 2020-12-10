@@ -143,7 +143,7 @@ export const Room = (props) => {
                     <div className="regular-view">
                         {
                             profiles.map( profile => 
-                                <Profile key={profile.id} user={user} profile={profile} />
+                                <Profile key={profile.id} user={user} auth={auth} profile={profile} />
                             )
                         }
                         <img className="arrows expand" src={expand} alt="expand" onMouseEnter={more} />

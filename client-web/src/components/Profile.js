@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react'
 
-// TODO: show last song from room a person is listening to
+import {isEmpty} from '../utils/isEmpty.js' 
+
+const SpotifyWebApi = require('spotify-web-api-js');
 
 export const Profile = (props) => {
 
-    const { user, profile } = props;
+    const spotifyApi = new SpotifyWebApi();
+    const { user, auth, profile } = props;
 
     const [readyToType, setReadyToType] = useState(0);
     const [newMessage, setNewMessage] = useState('');
     const [lastMessage, setLastMessage] = useState('');
+    const [listeningTo, setListeningTo] = useState({});
 
     const getLastMessage = () => {
         fetch(`http://localhost:3001/messages/last/${profile.id}`)
@@ -21,6 +25,12 @@ export const Profile = (props) => {
                 setReadyToType(true)
             } 
         })
+    }
+
+    const getTrackData = async () => {
+        await spotifyApi.setAccessToken(auth.access_token);
+        spotifyApi.getTrack(profile.listening_to)
+            .then(res => setListeningTo(res))
     }
     
     const handleSubmit = (e) => {
@@ -47,18 +57,34 @@ export const Profile = (props) => {
             console.log('Got:', message)
             getLastMessage();
         })
-        // disconnect when room changes
+        
         return () => source.close()
     }, [])
 
     useEffect(() => {
         getLastMessage();
+        getTrackData()
     }, [profile, newMessage])
 
+    // display listeningTo data
+    
     return (
         <div className={`profile ${ profile.user_id === user.id && 'active'}`}>
 
+            <div className="listening-to">
+                { !isEmpty(listeningTo) &&
+                    <>
+                        <p>Listening to:</p>
+                        <p>{listeningTo.name}</p>
+                        <p>{listeningTo.artists[0].name}</p>
+                        <img className="thumbnail" src={listeningTo.album.images[0].url} alt={listeningTo.artists[0].name} /> 
+                    </>
+                }
+            </div>
+
             <img key={ profile.id } src={ profile.image } alt="profile" />
+
+
             <div className="tag" onMouseEnter={() => setReadyToType(true)} onMouseLeave={() => lastMessage && !newMessage && setReadyToType(false)}>
                 { profile.user_id !== user.id || !readyToType ?
                     <p className="message">{lastMessage}</p>

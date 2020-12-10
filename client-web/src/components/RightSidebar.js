@@ -23,7 +23,6 @@ export const RightSidebar = (props) => {
     // TODO: add color extraction - https://www.npmjs.com/package/react-color-extractor
     
     const updateActiveTrack = async () => {
-        // get info about the player
         await spotifyApi.setAccessToken(auth.access_token);
         spotifyApi.getMyCurrentPlaybackState()
             .then(res => setActiveTrack(res.item))
@@ -47,6 +46,19 @@ export const RightSidebar = (props) => {
                 "uri": track.uri
             },
         });
+
+        // use profiles/listening-to to update in db
+        fetch('http://localhost:3001/profiles/listening-to', {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: "PUT",
+            body: JSON.stringify({
+                profile_id: profile.id,
+                track_id: track.id
+            })
+        })
+
         setActiveTrack(track)
     }
 
@@ -58,12 +70,12 @@ export const RightSidebar = (props) => {
 
                 { room.playlist &&
                     JSON.parse(room.playlist).map( (track, key) => 
-                            <TrackLineItem 
-                                key={key}
-                                track={track}
-                                active={track.id === activeTrack.id}
-                                setActiveTrack={handleSetActiveTrack}
-                            />
+                        <TrackLineItem 
+                            key={key}
+                            track={track}
+                            active={track.id === activeTrack.id}
+                            setActiveTrack={handleSetActiveTrack}
+                        />
                     )
                 }
 
@@ -76,4 +88,3 @@ export const RightSidebar = (props) => {
         </div>
     )
 }
-
