@@ -38,10 +38,16 @@ export const AddTrack = (props) => {
             .then(res => res.json())
             .then(res => {
 
+                let seedTracks = Object.values(recent);
+
+                if (room.playlist) {
+                    seedTracks = JSON.parse(room.playlist).length >= 5 ? 
+                        JSON.parse(room.playlist).map(track => track.id).slice(0, 5) : 
+                        Object.values(recent)
+                }
+
                 spotifyApi.getRecommendations({
-                    seed_tracks: JSON.parse(room.playlist).length >= 5 ? 
-                                    JSON.parse(room.playlist).map(track => track.id).slice(0, 5) : 
-                                    Object.values(recent),
+                    seed_tracks: seedTracks,
                     target_valence: scale(res.sentiment, [-5.0, 5.0], [0, 1] ),
                     limit: 5
                 })
