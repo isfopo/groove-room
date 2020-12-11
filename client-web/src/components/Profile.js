@@ -7,7 +7,7 @@ const SpotifyWebApi = require('spotify-web-api-js');
 export const Profile = (props) => {
 
     const spotifyApi = new SpotifyWebApi();
-    const { user, auth, profile } = props;
+    const { user, auth, room, profile } = props;
 
     const [readyToType, setReadyToType] = useState(0);
     const [newMessage, setNewMessage] = useState('');
@@ -31,6 +31,16 @@ export const Profile = (props) => {
         await spotifyApi.setAccessToken(auth.access_token);
         spotifyApi.getTrack(profile.listening_to)
             .then(res => setListeningTo(res))
+    }
+
+    const playListeningTo = async () => {
+        await spotifyApi.setAccessToken(auth.access_token);
+        spotifyApi.play({
+            "uris": JSON.parse(room.playlist).map( track => track.uri ),
+            "offset": {
+                "uri": listeningTo.uri
+            },
+        });
     }
     
     const handleSubmit = (e) => {
@@ -63,8 +73,9 @@ export const Profile = (props) => {
 
     useEffect(() => {
         getLastMessage();
-        getTrackData()
-    }, [profile, newMessage])
+        getTrackData();
+        playListeningTo();
+    }, [room, profile, newMessage])
 
     // display listeningTo data
     
