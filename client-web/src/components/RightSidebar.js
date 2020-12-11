@@ -25,7 +25,28 @@ export const RightSidebar = (props) => {
     const updateActiveTrack = async () => {
         await spotifyApi.setAccessToken(auth.access_token);
         spotifyApi.getMyCurrentPlaybackState()
-            .then(res => setActiveTrack(res.item))
+            .then(res => {
+                putListeningTo(res.item)
+                setActiveTrack(res.item)
+            })
+    }
+
+    /**
+     * Adds listening_to to db
+     * @param {Spotify Track Object} track track to put into listening in db
+     */
+    const putListeningTo = async (track) => {
+        // use profiles/listening-to to update in db
+        fetch('http://localhost:3001/profiles/listening-to', {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: "PUT",
+            body: JSON.stringify({
+                profile_id: profile.id,
+                track_id: track.id
+            })
+        })
     }
 
     useEffect(() => {
@@ -47,17 +68,7 @@ export const RightSidebar = (props) => {
             },
         });
 
-        // use profiles/listening-to to update in db
-        fetch('http://localhost:3001/profiles/listening-to', {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            method: "PUT",
-            body: JSON.stringify({
-                profile_id: profile.id,
-                track_id: track.id
-            })
-        })
+        putListeningTo(track)
 
         setActiveTrack(track)
     }
